@@ -3,6 +3,13 @@ grammar MyGrammar;
 // Lexer rules
 NEWLINE: '\r'? '\n';
 
+NAME: [a-zA-Z_][a-zA-Z0-9_]*;
+TYPE_COMMENT: '#' ~[\r\n]*;
+
+// Ignorar espacios en blanco
+WS: [ \t\r\n]+ -> skip;
+
+
 single_input: NEWLINE single_input
             | simple_stmt single_input
             | compound_stmt NEWLINE single_input
