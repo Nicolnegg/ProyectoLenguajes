@@ -5,6 +5,9 @@ NEWLINE: '\r'? '\n';
 
 NAME: [a-zA-Z_][a-zA-Z0-9_]*;
 TYPE_COMMENT: '#' ~[\r\n]*;
+AWAIT: 'await';
+NUMBER: [0-9]+;
+STRING: '"' (~["\r\n\\] | '\\' .)* '"';
 
 // Ignorar espacios en blanco
 WS: [ \t\r\n]+ -> skip;
