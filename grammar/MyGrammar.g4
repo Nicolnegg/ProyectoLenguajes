@@ -1,16 +1,26 @@
 grammar MyGrammar;
 
 // Lexer rules
-NEWLINE: '\r'? '\n';
+NEWLINE: '\r'? '\n' -> skip;  // Ignorar los saltos de línea
+SPACE: [ \t]+ -> skip;  // Ignorar los espacios en blanco
+
+INDENT: [ \t]+ ->  skip;
+DEDENT: ('\r'? '\n' [ \t]*)+ -> skip;
+
 
 NAME: [a-zA-Z_][a-zA-Z0-9_]*;
 TYPE_COMMENT: '#' ~[\r\n]*;
 AWAIT: 'await';
+ASYNC: 'async';
 NUMBER: [0-9]+;
 STRING: '"' (~["\r\n\\] | '\\' .)* '"';
 
+ENDMARKER: '<EOF>';
+
+
+
 // Ignorar espacios en blanco
-WS: [ \t\r\n]+ -> skip;
+
 
 
 single_input: NEWLINE single_input
@@ -114,6 +124,8 @@ or_test: and_test ('or' and_test)*;
 and_test: not_test ('and' not_test)*;
 not_test: 'not' not_test | comparison;
 comparison: expr (comp_op expr)*;
+
+
 
 
 
