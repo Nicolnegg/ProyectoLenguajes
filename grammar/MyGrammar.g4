@@ -1,22 +1,18 @@
 grammar MyGrammar;
 
-inicio  : 'hola' ID (',' ID)* ;
-ID : 	[a-zA-Z]+ ;
-ESP : [ \t\r\n]+ -> skip ;
-
 // Lexer rules
 NEWLINE: '\r'? '\n';
 
-single_input: NEWLINE
-            | simple_stmt
-            | compound_stmt NEWLINE
+single_input: NEWLINE single_input
+            | simple_stmt single_input
+            | compound_stmt NEWLINE single_input
             ;
 
 file_input: (NEWLINE | stmt)* ENDMARKER;
 
 eval_input: testlist NEWLINE* ENDMARKER;
 
-decorator: '@' dotted_name [ '(' [arglist] ')' ] NEWLINE;
+decorator: '@' dotted_name ( '(' arglist? ')' )? NEWLINE;
 
 decorators: decorator+;
 
@@ -24,35 +20,36 @@ decorated: decorators (classdef | funcdef | async_funcdef);
 
 async_funcdef: ASYNC funcdef;
 
-funcdef: 'def' NAME parameters ['->' test] ':' TYPE_COMMENT? func_body_suite;
-
 parameters: '(' typedargslist? ')';
+funcdef: 'def' NAME  parameters ('->' test)? ':' TYPE_COMMENT? func_body_suite;
+
+
 
 typedargslist: (
-  (tfpdef ['=' test] (',' TYPE_COMMENT? tfpdef ['=' test])* ',' TYPE_COMMENT? '/' (',' ( TYPE_COMMENT? tfpdef ['=' test] (
-        ',' TYPE_COMMENT? tfpdef ['=' test])* (TYPE_COMMENT | (',' TYPE_COMMENT? (
-        '*' tfpdef? (',' TYPE_COMMENT? tfpdef ['=' test])* (TYPE_COMMENT | (',' TYPE_COMMENT? ('**' tfpdef [','] TYPE_COMMENT? )?)?)
-      | '**' tfpdef [','] TYPE_COMMENT? )?)?)
-  | '*' tfpdef? (',' TYPE_COMMENT? tfpdef ['=' test])* (TYPE_COMMENT | (',' TYPE_COMMENT? ('**' tfpdef [','] TYPE_COMMENT? )?)?)
-  | '**' tfpdef [','] TYPE_COMMENT? )?)? )
-|  (tfpdef ['=' test] (',' TYPE_COMMENT? tfpdef ['=' test])* (TYPE_COMMENT | (',' TYPE_COMMENT? (
-   '*' tfpdef? (',' TYPE_COMMENT? tfpdef ['=' test])* (TYPE_COMMENT | (',' TYPE_COMMENT? ('**' tfpdef [','] TYPE_COMMENT? )?)?)
-  | '**' tfpdef [','] TYPE_COMMENT? )?)?)
-  | '*' tfpdef? (',' TYPE_COMMENT? tfpdef ['=' test])* (TYPE_COMMENT | (',' TYPE_COMMENT? ('**' tfpdef [','] TYPE_COMMENT? )?)?)
-  | '**' tfpdef [','] TYPE_COMMENT? )
+  (tfpdef ('=' test)? (',' TYPE_COMMENT? tfpdef ('=' test)?)* ',' TYPE_COMMENT? '/' (',' ( TYPE_COMMENT? tfpdef ('=' test)? (
+        ',' TYPE_COMMENT? tfpdef ('=' test)?)* (TYPE_COMMENT | (',' TYPE_COMMENT? (
+        '*' tfpdef? (',' TYPE_COMMENT? tfpdef ('=' test)?)* (TYPE_COMMENT | (',' TYPE_COMMENT? ('**' tfpdef (',')? TYPE_COMMENT? )?)?)
+      | '**' tfpdef (',')? TYPE_COMMENT? )?)?)
+  | '*' tfpdef? (',' TYPE_COMMENT? tfpdef ('=' test)?)* (TYPE_COMMENT | (',' TYPE_COMMENT? ('**' tfpdef (',')? TYPE_COMMENT? )?)?)
+  | '**' tfpdef (',')? TYPE_COMMENT? )?)? )
+|  (tfpdef ('=' test)? (',' TYPE_COMMENT? tfpdef ('=' test)?)* (TYPE_COMMENT | (',' TYPE_COMMENT? (
+   '*' tfpdef? (',' TYPE_COMMENT? tfpdef ('=' test)?)* (TYPE_COMMENT | (',' TYPE_COMMENT? ('**' tfpdef (',')? TYPE_COMMENT? )?)?)
+  | '**' tfpdef (',')? TYPE_COMMENT? )?)?)
+  | '*' tfpdef? (',' TYPE_COMMENT? tfpdef ('=' test)?)* (TYPE_COMMENT | (',' TYPE_COMMENT? ('**' tfpdef (',')? TYPE_COMMENT? )?)?)
+  | '**' tfpdef (',')? TYPE_COMMENT? )
 );
 
 tfpdef: NAME (':' test)?;
 
-varargslist: vfpdef ['=' test ](',' vfpdef ['=' test])* ',' '/' (',' ( (vfpdef ['=' test] (',' vfpdef ['=' test])* (',' (
-        '*' vfpdef? (',' vfpdef ['=' test])* (',' ('**' vfpdef [','])?)?
-      | '**' vfpdef [','])? )?
-  | '*' vfpdef? (',' vfpdef ['=' test])* (',' ('**' vfpdef [','])?)?
-  | '**' vfpdef [',']) )?)? | (vfpdef ['=' test] (',' vfpdef ['=' test])* (',' (
-        '*' vfpdef? (',' vfpdef ['=' test])* (',' ('**' vfpdef [','])?)?
-      | '**' vfpdef [','])? )?
-  | '*' vfpdef? (',' vfpdef ['=' test])* (',' ('**' vfpdef [','])?)?
-  | '**' vfpdef [',']
+varargslist: vfpdef ('=' test)? (',' vfpdef ('=' test)?)* ',' '/' (',' ( (vfpdef ('=' test)?  (',' vfpdef ('=' test)? )* (',' (
+        '*' vfpdef? (',' vfpdef ('=' test)? )* (',' ('**' vfpdef (',')?)?)?
+      | '**' vfpdef (',')?)? )?
+  | '*' vfpdef? (',' vfpdef ('=' test)? )* (',' ('**' vfpdef (',')?)?)?
+  | '**' vfpdef (',')?) )?)? | (vfpdef ('=' test)?  (',' vfpdef ('=' test)? )* (',' (
+        '*' vfpdef? (',' vfpdef ('=' test)? )* (',' ('**' vfpdef (',')?)?)?
+      | '**' vfpdef (',')?)? )?
+  | '*' vfpdef? (',' vfpdef ('=' test)? )* (',' ('**' vfpdef (',')?)?)?
+  | '**' vfpdef (',')?
 );
 
 vfpdef: NAME;
@@ -63,7 +60,7 @@ simple_stmt: small_stmt (';' small_stmt)* (';')? NEWLINE;
 
 small_stmt: expr_stmt | del_stmt | pass_stmt | flow_stmt | import_stmt | global_stmt | nonlocal_stmt | assert_stmt;
 expr_stmt: testlist_star_expr (annassign | augassign (yield_expr | testlist) | (('=' (yield_expr | testlist_star_expr))+ TYPE_COMMENT? )? );
-annassign: ':' test ['=' (yield_expr | testlist_star_expr)];
+annassign: ':' test ('=' (yield_expr | testlist_star_expr))?;
 testlist_star_expr: (test | star_expr) (',' (test | star_expr))* (',')?;
 augassign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//=');
 del_stmt: 'del' exprlist;
@@ -73,33 +70,33 @@ break_stmt: 'break';
 continue_stmt: 'continue';
 return_stmt: 'return' testlist_star_expr?;
 yield_stmt: yield_expr;
-raise_stmt: 'raise' (test ['from' test])?;
+raise_stmt: 'raise' (test ('from' test)?)?;
 import_stmt: import_name | import_from;
 import_name: 'import' dotted_as_names;
 import_from: 'from' (('.' | '...')* dotted_name | ('.' | '...')+)
               'import' ('*' | '(' import_as_names ')' | import_as_names);
 import_as_name: NAME ('as' NAME)?;
-dotted_as_name: dotted_name ['as' NAME];
+dotted_as_name: dotted_name ('as' NAME)?;
 import_as_names: import_as_name (',' import_as_name)* (',')?;
 dotted_as_names: dotted_as_name (',' dotted_as_name)*;
 dotted_name: NAME ('.' NAME)*;
 global_stmt: 'global' NAME (',' NAME)*;
 nonlocal_stmt: 'nonlocal' NAME (',' NAME)*;
-assert_stmt: 'assert' test [',' test];
+assert_stmt: 'assert' test (',' test)?;
 
 compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | with_stmt | funcdef | classdef | decorated | async_stmt;
 async_stmt: ASYNC (funcdef | with_stmt | for_stmt);
 if_stmt: 'if' namedexpr_test ':' suite ('elif' namedexpr_test ':' suite)* ('else' ':' suite)?;
-while_stmt: 'while' namedexpr_test ':' suite ['else' ':' suite];
-for_stmt: 'for' exprlist 'in' testlist ':' TYPE_COMMENT? suite ['else' ':' suite];
+while_stmt: 'while' namedexpr_test ':' suite ('else' ':' suite)?;
+for_stmt: 'for' exprlist 'in' testlist ':' TYPE_COMMENT? suite ('else' ':' suite)?;
 try_stmt: 'try' ':' suite ((except_clause ':' suite)+ ('else' ':' suite)? ('finally' ':' suite)? | 'finally' ':' suite);
 with_stmt: 'with' with_item (',' with_item)* ':' TYPE_COMMENT? suite;
-with_item: test ['as' expr];
-except_clause: 'except' (test ['as' NAME])?;
+with_item: test ('as' expr)?;
+except_clause: 'except' (test ('as' NAME)? )?;
 suite: simple_stmt | NEWLINE INDENT stmt+ DEDENT;
 
-namedexpr_test: test [':=' test];
-test: or_test ['if' or_test 'else' test] | lambdef;
+namedexpr_test: test (':=' test)?;
+test: or_test ('if' or_test 'else' test)? | lambdef;
 test_nocond: or_test | lambdef_nocond;
 lambdef: 'lambda' varargslist? ':' test;
 lambdef_nocond: 'lambda' varargslist? ':' test_nocond;
@@ -119,7 +116,7 @@ shift_expr: arith_expr (('<<' | '>>') arith_expr)*;
 arith_expr: term (('+' | '-') term)*;
 term: factor (('*' | '@' | '/' | '%' | '//') factor)*;
 factor: ('+' | '-' | '~') factor | power;
-power: atom_expr ['**' factor];
+power: atom_expr ('**' factor)?;
 atom_expr: AWAIT? atom trailer*;
 atom: ('(' (yield_expr | testlist_comp)? ')' |
        '[' (testlist_comp)? ']' |
@@ -139,16 +136,16 @@ dictorsetmaker: (((test ':' test | '**' expr)
 classdef: 'class' NAME ('(' arglist? ')')? ':' suite;
 arglist: argument (',' argument)* (',')?;
 
-argument: (test [comp_for] |
+argument: (test (comp_for)? |
            test ':=' test |
            test '=' test |
            '**' test |
            '*' test);
 
 comp_iter: comp_for | comp_if;
-sync_comp_for: 'for' exprlist 'in' or_test [comp_iter];
+sync_comp_for: 'for' exprlist 'in' or_test comp_iter?;
 comp_for: ASYNC? sync_comp_for;
-comp_if: 'if' test_nocond [comp_iter];
+comp_if: 'if' test_nocond comp_iter?;
 
 encoding_decl: NAME;
 
