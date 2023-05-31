@@ -4,18 +4,20 @@ grammar MyGrammar;
 NEWLINE: '\r'? '\n' -> skip;  // Ignorar los saltos de línea
 SPACE: [ \t]+ -> skip;  // Ignorar los espacios en blanco
 
+INDENT: [ \t]+ ->  skip;
+DEDENT: ('\r'? '\n' [ \t]*)+ -> skip;
 
 
 NAME: [a-zA-Z_][a-zA-Z0-9_]*;
 TYPE_COMMENT: '#' ~[\r\n]*;
 AWAIT: 'await';
+ASYNC: 'async';
 NUMBER: [0-9]+;
 STRING: '"' (~["\r\n\\] | '\\' .)* '"';
 
 ENDMARKER: '<EOF>';
 
-INDENT: [ \t]+ ->  skip;
-DEDENT: ('\r'? '\n' [ \t]*)+ -> skip;
+
 
 // Ignorar espacios en blanco
 
