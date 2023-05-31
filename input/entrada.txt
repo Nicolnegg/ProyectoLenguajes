@@ -1,4 +1,4 @@
 def my_function(param1, param2: int) -> str:
     # Cuerpo de la función
-    a=3
+
     return "Hello, world!"
