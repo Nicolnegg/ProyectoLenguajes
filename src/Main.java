@@ -1,32 +1,39 @@
+import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
 import javax.swing.*;
 import java.io.File;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         // create a CharStream that reads from standard input / file
         // create a lexer that feeds off of input CharStream
-        MyGrammarLexer lexer;
-
-
+        PythonLexer lexer;
 
         if (args.length>0)
-            lexer = new MyGrammarLexer(CharStreams.fromFileName(args[0]));
+            lexer = new PythonLexer(CharStreams.fromFileName(args[0]));
         else
-            lexer = new MyGrammarLexer(CharStreams.fromStream(System.in));
+            lexer = new PythonLexer(CharStreams.fromStream(System.in));
         // create a buffer of tokens pulled from the lexer
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        CommonTokenStream tokens = new CommonTokenStream((TokenSource) lexer);
         // create a parser that feeds off the tokens buffer
-        MyGrammarParser parser = new MyGrammarParser(tokens);
-        ParseTree tree = parser.single_input(); // begin parsing at init rule
+        PythonParser parser = new PythonParser(tokens);
+        ParseTree tree = parser.root(); // begin parsing at init rule
+
+        // Mostrar el árbol en una vista gráfica
+        TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), tree);
+        viewer.open();
 
         // Create a generic parse tree walker that can trigger callbacks
         ParseTreeWalker walker = new ParseTreeWalker();
         // Walk the tree created during the parse, trigger callbacks
         walker.walk(new ListenersComentarios(), tree);
         System.out.println(); // print a \n after translation
+
+        String treeString = tree.toStringTree(parser);
+        System.out.println(treeString);
 
 
 
