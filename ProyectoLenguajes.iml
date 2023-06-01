@@ -20,6 +20,15 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/Coursera/Coursera/A4/antlr-4.12.0-complete.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
           <root url="jar://D:/Descargas/antlr-4.12.0-complete.jar!/" />
         </CLASSES>
         <JAVADOC />

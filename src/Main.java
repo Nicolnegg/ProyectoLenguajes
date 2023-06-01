@@ -1,5 +1,8 @@
+import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+
+import javax.swing.*;
 import java.io.File;
 
 public class Main {
@@ -26,6 +29,13 @@ public class Main {
 
         String treeString = tree.toStringTree(parser);
         System.out.println(treeString);
+        // Mostrar la vista previa del árbol
+        JFrame frame = new JFrame("Árbol de análisis sintáctico");
+        TreeViewer viewer = new TreeViewer(null, tree);
+        frame.getContentPane().add(viewer);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+        frame.setVisible(true);
 
 
 
