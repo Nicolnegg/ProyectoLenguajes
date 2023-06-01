@@ -1,6 +1,21 @@
+def es_primo(numero):
+    if numero < 2:
+        return False
+    for i in range(2, int(numero**0.5) + 1):
+        if numero % i == 0:
+            return False
+    return True
 
-# Cuerpo de la función
-a= "Hello, world!"
-a= "Hello, world!"
-a= "Hello, world!"
-return a
+def generar_primos(rango_inicial, rango_final):
+    primos = []
+    for numero in range(rango_inicial, rango_final + 1):
+        if es_primo(numero):
+            primos.append(numero)
+    return primos
+
+rango_inicial = int(input("Ingrese el rango inicial: "))
+rango_final = int(input("Ingrese el rango final: "))
+
+lista_primos = generar_primos(rango_inicial, rango_final)
+
+print("Números primos en el rango {}: {}".format((rango_inicial, rango_final), lista_primos))
