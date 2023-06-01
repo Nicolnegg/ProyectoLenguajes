@@ -1,9 +1,5 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.*;
 import java.io.File;
 
 public class Main {
@@ -11,14 +7,6 @@ public class Main {
         // create a CharStream that reads from standard input / file
         // create a lexer that feeds off of input CharStream
         MyGrammarLexer lexer;
-
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                InterfazProyecto Primer = new InterfazProyecto();
-                Primer.setVisible(true);
-            }
-        });
 
         if (args.length>0)
             lexer = new MyGrammarLexer(CharStreams.fromFileName(args[0]));

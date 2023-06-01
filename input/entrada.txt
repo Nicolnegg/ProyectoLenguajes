@@ -1,5 +1,6 @@
-def my_function(param1, param2: int) -> str:
-    # Cuerpo de la función
-    a= "Hello, world!"
 
-    return a
+# Cuerpo de la función
+a= "Hello, world!"
+a= "Hello, world!"
+a= "Hello, world!"
+return a
