@@ -5,5 +5,5 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import java.util.ArrayList;
 import java.util.List;
-public class VisitorsComentarios  extends MyGrammarBaseVisitor<Void> {
+public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
 }
