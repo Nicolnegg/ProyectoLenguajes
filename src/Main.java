@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.*;
 
 import javax.swing.*;
 import java.io.File;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -21,6 +22,10 @@ public class Main {
         PythonParser parser = new PythonParser(tokens);
         ParseTree tree = parser.root(); // begin parsing at init rule
 
+        // Mostrar el árbol en una vista gráfica
+        TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), tree);
+        viewer.open();
+
         // Create a generic parse tree walker that can trigger callbacks
         ParseTreeWalker walker = new ParseTreeWalker();
         // Walk the tree created during the parse, trigger callbacks
@@ -29,13 +34,7 @@ public class Main {
 
         String treeString = tree.toStringTree(parser);
         System.out.println(treeString);
-        // Mostrar la vista previa del árbol
-        JFrame frame = new JFrame("Árbol de análisis sintáctico");
-        TreeViewer viewer = new TreeViewer(null, tree);
-        frame.getContentPane().add(viewer);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
-        frame.setVisible(true);
+
 
 
 
