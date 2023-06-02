@@ -18,14 +18,7 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterRoot(PythonParser.RootContext ctx) {
-        TokenStream tokens = parser.getTokenStream();
-        int start = ctx.getStart().getTokenIndex();
-        int stop = ctx.getStop().getTokenIndex();
-        for (int i = start; i <= stop; i++) {
-            Token token = tokens.get(i);
-            String text = token.getText();
-            System.out.print(text); // Imprimir el token con un espacio después
-        }
+
 
     }
 
@@ -46,7 +39,6 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterFile_input(PythonParser.File_inputContext ctx) {
-
     }
 
     @Override
@@ -66,6 +58,7 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterStmt(PythonParser.StmtContext ctx) {
+
 
     }
 
@@ -216,6 +209,16 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterFuncdef(PythonParser.FuncdefContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+        System.out.println("#Comment"); // Imprimir el token con un espacio después
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+        }
+
 
     }
 
