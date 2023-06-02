@@ -66,12 +66,25 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterInter_compound_stmt(PythonParser.Inter_compound_stmtContext ctx) {
-        System.out.print("C");
+        TokenStream tokens = parser.getTokenStream();
+
+        int start = ctx.getParent().getParent().getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+
+            for (int i = start; i <= start+2; i++) {
+                Token token = tokens.get(i);
+
+                String text = token.getText();
+
+                System.out.print(text); // Imprimir el token con un espacio después
+            }
+        System.out.println("c");
     }
 
     @Override
     public void exitInter_compound_stmt(PythonParser.Inter_compound_stmtContext ctx) {
-        System.out.println();
+
     }
 
 
@@ -139,22 +152,6 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterSuite(PythonParser.SuiteContext ctx) {
-        TokenStream tokens = parser.getTokenStream();
-        int start = ctx.getStart().getTokenIndex();
-        int stop = ctx.getStop().getTokenIndex();
-
-        if(ctx.LINE_BREAK()!=null){
-            for (int i = start; i <= start+2; i++) {
-                Token token = tokens.get(i);
-
-                String text = token.getText();
-
-                System.out.print(text); // Imprimir el token con un espacio después
-            }
-        }
-
-
-
     }
 
     @Override
@@ -317,7 +314,20 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterSimple_stmt(PythonParser.Simple_stmtContext ctx) {
-        System.out.print("a"); // Ejemplo quitar despues
+        TokenStream tokens = parser.getTokenStream();
+
+        int start = ctx.getParent().getParent().getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+
+        for (int i = start; i <= start+2; i++) {
+            Token token = tokens.get(i);
+
+            String text = token.getText();
+
+            System.out.print(text); // Imprimir el token con un espacio después
+        }
+        System.out.print("a");
 
 
     }
