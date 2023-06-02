@@ -1,18 +1,20 @@
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.*;
-//revisar for y listas en for y booleanos
-//revisar for y listas en for
-//revisar stack y array
+
 public class ListenersComentarios implements PythonParserListener {
 
+    private final PythonParser parser;
+
+    public ListenersComentarios(PythonParser parser) {
+        this.parser = parser;
+    }
 
     @Override
     public void enterRoot(PythonParser.RootContext ctx) {
+
 
     }
 
@@ -33,7 +35,6 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterFile_input(PythonParser.File_inputContext ctx) {
-
     }
 
     @Override
@@ -54,6 +55,8 @@ public class ListenersComentarios implements PythonParserListener {
     @Override
     public void enterStmt(PythonParser.StmtContext ctx) {
 
+
+
     }
 
     @Override
@@ -62,12 +65,46 @@ public class ListenersComentarios implements PythonParserListener {
     }
 
     @Override
+    public void enterInter_compound_stmt(PythonParser.Inter_compound_stmtContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+
+
+
+        if (ctx.getParent() != null && ctx.getParent().getParent() != null) {
+            ParserRuleContext parent = (ParserRuleContext) ctx.getParent().getParent();
+            int start = ctx.getParent().getParent().getStart().getTokenIndex();
+            int stop = ctx.getStop().getTokenIndex();
+
+            if (parent.getClass().getSimpleName().equals("SuiteContext")) {
+                // El padre es la regla "suite"
+
+                for (int i = start; i <= start+2; i++) {
+                    Token token = tokens.get(i);
+
+                    String text = token.getText();
+
+                    System.out.print(text); // Imprimir el token con un espacio después
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void exitInter_compound_stmt(PythonParser.Inter_compound_stmtContext ctx) {
+
+    }
+
+
+    @Override
     public void enterIf_stmt(PythonParser.If_stmtContext ctx) {
+
 
     }
 
     @Override
     public void exitIf_stmt(PythonParser.If_stmtContext ctx) {
+
 
     }
 
@@ -83,7 +120,39 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterFor_stmt(PythonParser.For_stmtContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
 
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                String comment = (" #Ciclo de " + ctx.exprlist().getText());
+                String[] partes = ctx.testlist().getText().split("\\(", 2);
+                String complemento= " en ";
+                if(partes[0].equals("range")){
+                    complemento += "un rango ";
+                    String[] valores = partes[1].substring(0, partes[1].length() - 1).split(",");
+                    complemento += "de "+ valores[0];
+                    if(valores.length >=2){
+                        complemento += " a "+ valores[1];
+                    }
+                    if(valores.length >=3){
+                        complemento += " con un salto entre numeros de "+ valores[1];
+                    }
+
+                }
+                else {
+                    complemento += ctx.testlist().getText();
+                }
+
+                System.out.println(comment + complemento); // Imprimir el token con un espacio después
+                break;
+            }
+        }
     }
 
     @Override
@@ -123,7 +192,6 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterSuite(PythonParser.SuiteContext ctx) {
-
     }
 
     @Override
@@ -203,6 +271,22 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterFuncdef(PythonParser.FuncdefContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                if(ctx.typedargslist()!=null && ctx.typedargslist().def_parameters()!=null){
+                    System.out.println(" #Esta funcion mira si " + ctx.typedargslist().getText() + " "+ ctx.name().getText()); // Imprimir el token con un espacio después
+                }
+                break;
+            }
+        }
 
     }
 
@@ -273,16 +357,38 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterSimple_stmt(PythonParser.Simple_stmtContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+
+        if (ctx.getParent() != null && ctx.getParent().getParent() != null) {
+            ParserRuleContext parent = (ParserRuleContext) ctx.getParent().getParent();
+            int start = ctx.getParent().getParent().getStart().getTokenIndex();
+            int stop = ctx.getStop().getTokenIndex();
+
+            if (parent.getClass().getSimpleName().equals("SuiteContext")) {
+                // El padre es la regla "suite"
+
+                for (int i = start; i <= start+2; i++) {
+                    Token token = tokens.get(i);
+
+                    String text = token.getText();
+
+                    System.out.print(text); // Imprimir el token con un espacio después
+                }
+            }
+        }
+        System.out.print("a");
+
 
     }
 
     @Override
     public void exitSimple_stmt(PythonParser.Simple_stmtContext ctx) {
-
+        System.out.println(); // ESTA IMPRIME EL SALTO DE LINEA NO QUITAR
     }
 
     @Override
     public void enterExpr_stmt(PythonParser.Expr_stmtContext ctx) {
+
 
     }
 
@@ -810,4 +916,7 @@ public class ListenersComentarios implements PythonParserListener {
     public void exitEveryRule(ParserRuleContext parserRuleContext) {
 
     }
+
 }
+
+

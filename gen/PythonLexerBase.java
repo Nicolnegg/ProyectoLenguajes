@@ -60,6 +60,7 @@ public abstract class PythonLexerBase extends Lexer {
             {
                 // First emit an extra line break that serves as the end of the statement.
                 emit(PythonLexer.LINE_BREAK);
+
             }
 
             // Now emit as much DEDENT tokens as needed.

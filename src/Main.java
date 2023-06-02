@@ -27,6 +27,8 @@ public class Main {
         else
             lexer = new PythonLexer(CharStreams.fromStream(System.in));
         // create a buffer of tokens pulled from the lexer
+
+
         CommonTokenStream tokens = new CommonTokenStream((TokenSource) lexer);
         // create a parser that feeds off the tokens buffer
         PythonParser parser = new PythonParser(tokens);
@@ -39,14 +41,12 @@ public class Main {
         // Create a generic parse tree walker that can trigger callbacks
         ParseTreeWalker walker = new ParseTreeWalker();
         // Walk the tree created during the parse, trigger callbacks
-        walker.walk(new ListenersComentarios(), tree);
+        walker.walk(new ListenersComentarios(parser), tree);
         System.out.println(); // print a \n after translation
 
-        String treeString = tree.toStringTree(parser);
-        System.out.println(treeString);
 
-
-
+        VisitorsComentarios visitor = new VisitorsComentarios();
+        visitor.visit(tree);
 
 
     }

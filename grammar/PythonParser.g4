@@ -1,33 +1,6 @@
-/*
-Python grammar.
-The MIT License (MIT).
-Copyright (c) 2014, Bart Kiers, bart@big-o.nl
-Copyright (c) 2019, Dmitriy Litovchenko, Dmitry.Litovchenko1@yandex.ru, Positive Technologies
-Copyright (c) 2019, Nikita Subbotin, sub.nik.and@gmail.com, Positive Technologies
-Copyright (c) 2019, Ivan Kochurkin, kvanttt@gmail.com, Positive Technologies
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
 
 parser grammar PythonParser;
 
-// Insert here @header for C++ parser.
 
 options { tokenVocab=PythonLexer; superClass=PythonParserBase; }
 
@@ -37,7 +10,7 @@ root: (single_input | file_input | eval_input)? EOF ;
 single_input
     : LINE_BREAK
     | simple_stmt
-    | compound_stmt LINE_BREAK
+    | inter_compound_stmt LINE_BREAK
     ;
 
 // A module or sequence of commands read from an input file
@@ -52,9 +25,10 @@ eval_input
 
 stmt
     : simple_stmt
-    | compound_stmt
+    | inter_compound_stmt
     ;
 
+inter_compound_stmt: compound_stmt;
 compound_stmt
     : IF cond=test COLON suite elif_clause* else_clause?                             #if_stmt
     | WHILE test COLON suite else_clause?                                            #while_stmt
