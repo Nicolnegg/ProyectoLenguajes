@@ -29,7 +29,7 @@ public class Main {
         // Create a generic parse tree walker that can trigger callbacks
         ParseTreeWalker walker = new ParseTreeWalker();
         // Walk the tree created during the parse, trigger callbacks
-        walker.walk(new ListenersComentarios(), tree);
+        walker.walk(new ListenersComentarios(parser), tree);
         System.out.println(); // print a \n after translation
 
 

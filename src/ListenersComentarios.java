@@ -7,13 +7,25 @@ import java.util.StringTokenizer;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-//revisar for y listas en for y booleanos
-//revisar for y listas en for
-//revisar stack y array
+
 public class ListenersComentarios implements PythonParserListener {
+
+    private final PythonParser parser;
+
+    public ListenersComentarios(PythonParser parser) {
+        this.parser = parser;
+    }
 
     @Override
     public void enterRoot(PythonParser.RootContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+        }
 
     }
 
