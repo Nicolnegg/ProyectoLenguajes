@@ -17,6 +17,8 @@ public class Main {
         else
             lexer = new PythonLexer(CharStreams.fromStream(System.in));
         // create a buffer of tokens pulled from the lexer
+
+
         CommonTokenStream tokens = new CommonTokenStream((TokenSource) lexer);
         // create a parser that feeds off the tokens buffer
         PythonParser parser = new PythonParser(tokens);

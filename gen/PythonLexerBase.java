@@ -60,6 +60,7 @@ public abstract class PythonLexerBase extends Lexer {
             {
                 // First emit an extra line break that serves as the end of the statement.
                 emit(PythonLexer.LINE_BREAK);
+
             }
 
             // Now emit as much DEDENT tokens as needed.
@@ -143,6 +144,7 @@ public abstract class PythonLexerBase extends Lexer {
 
     private void ProcessNewLine(int indent) {
         emit(PythonLexer.LINE_BREAK);
+        System.out.println("Se encontró un LINE_BREAK en la línea " );
 
         int previous = _indents.size() == 0 ? 0 : _indents.peek();
 

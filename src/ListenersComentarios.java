@@ -89,7 +89,7 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterFor_stmt(PythonParser.For_stmtContext ctx) {
-
+       System.out.println("FOr");
     }
 
     @Override
@@ -212,11 +212,13 @@ public class ListenersComentarios implements PythonParserListener {
         TokenStream tokens = parser.getTokenStream();
         int start = ctx.getStart().getTokenIndex();
         int stop = ctx.getStop().getTokenIndex();
-        System.out.println("#Comment"); // Imprimir el token con un espacio después
+        if(ctx.typedargslist()!=null && ctx.typedargslist().def_parameters()!=null){
+            System.out.println("#Esta funcion mira si " + ctx.typedargslist().getText() + " "+ ctx.name().getText()); // Imprimir el token con un espacio después
+        }
         for (int i = start; i <= stop; i++) {
             Token token = tokens.get(i);
             String text = token.getText();
-            System.out.print(text); // Imprimir el token con un espacio después
+            System.out.print(text+"i"); // Imprimir el token con un espacio después
         }
 
 
@@ -826,4 +828,7 @@ public class ListenersComentarios implements PythonParserListener {
     public void exitEveryRule(ParserRuleContext parserRuleContext) {
 
     }
+
 }
+
+
