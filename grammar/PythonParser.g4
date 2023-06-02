@@ -10,7 +10,7 @@ root: (single_input | file_input | eval_input)? EOF ;
 single_input
     : LINE_BREAK
     | simple_stmt
-    | compound_stmt LINE_BREAK
+    | inter_compound_stmt LINE_BREAK
     ;
 
 // A module or sequence of commands read from an input file
@@ -25,9 +25,10 @@ eval_input
 
 stmt
     : simple_stmt
-    | compound_stmt
+    | inter_compound_stmt
     ;
 
+inter_compound_stmt: compound_stmt;
 compound_stmt
     : IF cond=test COLON suite elif_clause* else_clause?                             #if_stmt
     | WHILE test COLON suite else_clause?                                            #while_stmt

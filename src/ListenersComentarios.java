@@ -65,19 +65,19 @@ public class ListenersComentarios implements PythonParserListener {
     }
 
     @Override
-    public void enterCompound_stmt(PythonParser.Compound_stmtContext ctx) {
-
+    public void enterInter_compound_stmt(PythonParser.Inter_compound_stmtContext ctx) {
+        System.out.print("C");
     }
 
     @Override
-    public void exitCompound_stmt(PythonParser.Compound_stmtContext ctx) {
-
+    public void exitInter_compound_stmt(PythonParser.Inter_compound_stmtContext ctx) {
+        System.out.println();
     }
 
 
     @Override
     public void enterIf_stmt(PythonParser.If_stmtContext ctx) {
-        System.out.println("c");
+
 
     }
 
