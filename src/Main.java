@@ -32,11 +32,9 @@ public class Main {
         walker.walk(new ListenersComentarios(), tree);
         System.out.println(); // print a \n after translation
 
-        String treeString = tree.toStringTree(parser);
-        System.out.println(treeString);
 
-
-
+        VisitorsComentarios visitor = new VisitorsComentarios();
+        visitor.visit(tree);
 
 
     }
