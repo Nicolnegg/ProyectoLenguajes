@@ -4,6 +4,8 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import org.antlr.v4.runtime.*;
 
+import java.util.StringTokenizer;
+
 public class ListenersComentarios implements PythonParserListener {
 
     private final PythonParser parser;
@@ -98,7 +100,64 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterIf_stmt(PythonParser.If_stmtContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
 
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                String comment = (" #Condicional al que se entra si ");
+                String complemento ="";
+                String[] varios_condicionales = ctx.test().getText().split("and|or");
+
+                for (int a = 0; a < varios_condicionales.length; a++) {
+
+                    String[] partes = varios_condicionales[a].split("<>|==|>=|<=|!=|>|<");
+                    if(partes.length==2){
+                        String[] operador = varios_condicionales[a].split(partes[0])[1].split(partes[1]);
+                        if (operador[0].equals("<")){
+                            complemento+= partes[0] + " es menor que " + partes[1];
+                        }
+                        else if (operador[0].equals(">")){
+                            complemento+= partes[0] + " es mayor que " + partes[1];
+                        }
+                        else if (operador[0].equals("==")){
+                            complemento+= partes[0] + " es igual que " + partes[1];
+                        }
+                        else if (operador[0].equals(">=")){
+                            complemento+= partes[0] + " es mayor o igual que " + partes[1];
+                        }
+                        else if (operador[0].equals("<=")){
+                            complemento+= partes[0] + " es menor o igual que " + partes[1];
+                        }
+                        else if (operador[0].equals("!=") || operador[0].equals("<>")){
+                            complemento+= partes[0] + " es diferente de " + partes[1];
+                        }
+                    }
+                    else{
+                        complemento+= varios_condicionales[a];
+                    }
+                    if(a<varios_condicionales.length-1){
+                        String[] union = ctx.test().getText().split(varios_condicionales[a])[1].split(varios_condicionales[a+1]);
+                        if (union[0].equals("and")){
+                            complemento+= " y " ;
+                        }
+                        else if (union[0].equals("or")){
+                            complemento+= " o " ;
+                        }
+                    }
+
+
+                }
+
+                System.out.println(comment + complemento); // Imprimir el token con un espacio después
+                break;
+            }
+        }
 
     }
 
@@ -211,11 +270,89 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterElif_clause(PythonParser.Elif_clauseContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+
+        if (ctx.getParent() != null && ctx.getParent().getParent().getParent().getParent() != null) {
+            ParserRuleContext parent = (ParserRuleContext) ctx.getParent().getParent().getParent().getParent();
+            int starti = ctx.getParent().getParent().getParent().getParent().getStart().getTokenIndex();
+            int stopi = ctx.getStop().getTokenIndex();
+
+            if (parent.getClass().getSimpleName().equals("SuiteContext")) {
+                // El padre es la regla "suite"
+
+                for (int i = starti; i <= starti+2; i++) {
+                    Token token = tokens.get(i);
+
+                    String text = token.getText();
+
+                    System.out.print(text); // Imprimir el token con un espacio después
+                }
+            }
+        }
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                String comment = (" #Condicional al que se entra si ");
+                String complemento ="";
+                String[] varios_condicionales = ctx.test().getText().split("and|or");
+
+                for (int a = 0; a < varios_condicionales.length; a++) {
+
+                    String[] partes = varios_condicionales[a].split("<>|==|>=|<=|!=|>|<");
+                    if(partes.length==2){
+                        String[] operador = varios_condicionales[a].split(partes[0])[1].split(partes[1]);
+                        if (operador[0].equals("<")){
+                            complemento+= partes[0] + " es menor que " + partes[1];
+                        }
+                        else if (operador[0].equals(">")){
+                            complemento+= partes[0] + " es mayor que " + partes[1];
+                        }
+                        else if (operador[0].equals("==")){
+                            complemento+= partes[0] + " es igual que " + partes[1];
+                        }
+                        else if (operador[0].equals(">=")){
+                            complemento+= partes[0] + " es mayor o igual que " + partes[1];
+                        }
+                        else if (operador[0].equals("<=")){
+                            complemento+= partes[0] + " es menor o igual que " + partes[1];
+                        }
+                        else if (operador[0].equals("!=") || operador[0].equals("<>")){
+                            complemento+= partes[0] + " es diferente de " + partes[1];
+                        }
+                    }
+                    else{
+                        complemento+= varios_condicionales[a];
+                    }
+                    if(a<varios_condicionales.length-1){
+                        String[] union = ctx.test().getText().split(varios_condicionales[a])[1].split(varios_condicionales[a+1]);
+                        if (union[0].equals("and")){
+                            complemento+= " y " ;
+                        }
+                        else if (union[0].equals("or")){
+                            complemento+= " o " ;
+                        }
+                    }
+
+
+                }
+
+
+                System.out.println(comment + complemento); // Imprimir el token con un espacio después
+                break;
+            }
+        }
 
     }
 
     @Override
     public void exitElif_clause(PythonParser.Elif_clauseContext ctx) {
+
 
     }
 
