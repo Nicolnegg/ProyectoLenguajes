@@ -88,7 +88,6 @@ public class ListenersComentarios implements PythonParserListener {
             }
         }
 
-        System.out.println("c");
     }
 
     @Override
@@ -121,7 +120,39 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterFor_stmt(PythonParser.For_stmtContext ctx) {
-       System.out.println("FOr");
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                String comment = (" #Ciclo de " + ctx.exprlist().getText());
+                String[] partes = ctx.testlist().getText().split("\\(", 2);
+                String complemento= " en ";
+                if(partes[0].equals("range")){
+                    complemento += "un rango ";
+                    String[] valores = partes[1].substring(0, partes[1].length() - 1).split(",");
+                    complemento += "de "+ valores[0];
+                    if(valores.length >=2){
+                        complemento += " a "+ valores[1];
+                    }
+                    if(valores.length >=3){
+                        complemento += " con un salto entre numeros de "+ valores[1];
+                    }
+
+                }
+                else {
+                    complemento += ctx.testlist().getText();
+                }
+
+                System.out.println(comment + complemento); // Imprimir el token con un espacio después
+                break;
+            }
+        }
     }
 
     @Override
