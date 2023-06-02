@@ -144,7 +144,6 @@ public abstract class PythonLexerBase extends Lexer {
 
     private void ProcessNewLine(int indent) {
         emit(PythonLexer.LINE_BREAK);
-        System.out.println("Se encontró un LINE_BREAK en la línea " );
 
         int previous = _indents.size() == 0 ? 0 : _indents.peek();
 

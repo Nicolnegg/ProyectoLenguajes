@@ -1,12 +1,8 @@
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.*;
 
 public class ListenersComentarios implements PythonParserListener {
 
@@ -60,6 +56,7 @@ public class ListenersComentarios implements PythonParserListener {
     public void enterStmt(PythonParser.StmtContext ctx) {
 
 
+
     }
 
     @Override
@@ -68,12 +65,25 @@ public class ListenersComentarios implements PythonParserListener {
     }
 
     @Override
+    public void enterCompound_stmt(PythonParser.Compound_stmtContext ctx) {
+
+    }
+
+    @Override
+    public void exitCompound_stmt(PythonParser.Compound_stmtContext ctx) {
+
+    }
+
+
+    @Override
     public void enterIf_stmt(PythonParser.If_stmtContext ctx) {
+        System.out.println("c");
 
     }
 
     @Override
     public void exitIf_stmt(PythonParser.If_stmtContext ctx) {
+
 
     }
 
@@ -129,6 +139,21 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterSuite(PythonParser.SuiteContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+        if(ctx.LINE_BREAK()!=null){
+            for (int i = start; i <= start+2; i++) {
+                Token token = tokens.get(i);
+
+                String text = token.getText();
+
+                System.out.print(text); // Imprimir el token con un espacio después
+            }
+        }
+
+
 
     }
 
@@ -212,15 +237,16 @@ public class ListenersComentarios implements PythonParserListener {
         TokenStream tokens = parser.getTokenStream();
         int start = ctx.getStart().getTokenIndex();
         int stop = ctx.getStop().getTokenIndex();
+
         if(ctx.typedargslist()!=null && ctx.typedargslist().def_parameters()!=null){
             System.out.println("#Esta funcion mira si " + ctx.typedargslist().getText() + " "+ ctx.name().getText()); // Imprimir el token con un espacio después
         }
         for (int i = start; i <= stop; i++) {
             Token token = tokens.get(i);
             String text = token.getText();
-            System.out.print(text+"i"); // Imprimir el token con un espacio después
-        }
 
+            System.out.print(text); // Imprimir el token con un espacio después
+        }
 
     }
 
@@ -291,16 +317,19 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterSimple_stmt(PythonParser.Simple_stmtContext ctx) {
+        System.out.print("a"); // Ejemplo quitar despues
+
 
     }
 
     @Override
     public void exitSimple_stmt(PythonParser.Simple_stmtContext ctx) {
-
+        System.out.println(); // ESTA IMPRIME EL SALTO DE LINEA NO QUITAR
     }
 
     @Override
     public void enterExpr_stmt(PythonParser.Expr_stmtContext ctx) {
+
 
     }
 
