@@ -12,6 +12,16 @@ public class Main {
         // create a lexer that feeds off of input CharStream
         PythonLexer lexer;
 
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                InterfazProyecto Primer = new InterfazProyecto();
+                Primer.setVisible(true);
+            }
+        });
+
+
+
         if (args.length>0)
             lexer = new PythonLexer(CharStreams.fromFileName(args[0]));
         else
