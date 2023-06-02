@@ -68,17 +68,26 @@ public class ListenersComentarios implements PythonParserListener {
     public void enterInter_compound_stmt(PythonParser.Inter_compound_stmtContext ctx) {
         TokenStream tokens = parser.getTokenStream();
 
-        int start = ctx.getParent().getParent().getStart().getTokenIndex();
-        int stop = ctx.getStop().getTokenIndex();
 
 
-            for (int i = start; i <= start+2; i++) {
-                Token token = tokens.get(i);
+        if (ctx.getParent() != null && ctx.getParent().getParent() != null) {
+            ParserRuleContext parent = (ParserRuleContext) ctx.getParent().getParent();
+            int start = ctx.getParent().getParent().getStart().getTokenIndex();
+            int stop = ctx.getStop().getTokenIndex();
 
-                String text = token.getText();
+            if (parent.getClass().getSimpleName().equals("SuiteContext")) {
+                // El padre es la regla "suite"
 
-                System.out.print(text); // Imprimir el token con un espacio después
+                for (int i = start; i <= start+2; i++) {
+                    Token token = tokens.get(i);
+
+                    String text = token.getText();
+
+                    System.out.print(text); // Imprimir el token con un espacio después
+                }
             }
+        }
+
         System.out.println("c");
     }
 
@@ -235,14 +244,17 @@ public class ListenersComentarios implements PythonParserListener {
         int start = ctx.getStart().getTokenIndex();
         int stop = ctx.getStop().getTokenIndex();
 
-        if(ctx.typedargslist()!=null && ctx.typedargslist().def_parameters()!=null){
-            System.out.println("#Esta funcion mira si " + ctx.typedargslist().getText() + " "+ ctx.name().getText()); // Imprimir el token con un espacio después
-        }
+
         for (int i = start; i <= stop; i++) {
             Token token = tokens.get(i);
             String text = token.getText();
-
             System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                if(ctx.typedargslist()!=null && ctx.typedargslist().def_parameters()!=null){
+                    System.out.println(" #Esta funcion mira si " + ctx.typedargslist().getText() + " "+ ctx.name().getText()); // Imprimir el token con un espacio después
+                }
+                break;
+            }
         }
 
     }
@@ -316,16 +328,22 @@ public class ListenersComentarios implements PythonParserListener {
     public void enterSimple_stmt(PythonParser.Simple_stmtContext ctx) {
         TokenStream tokens = parser.getTokenStream();
 
-        int start = ctx.getParent().getParent().getStart().getTokenIndex();
-        int stop = ctx.getStop().getTokenIndex();
+        if (ctx.getParent() != null && ctx.getParent().getParent() != null) {
+            ParserRuleContext parent = (ParserRuleContext) ctx.getParent().getParent();
+            int start = ctx.getParent().getParent().getStart().getTokenIndex();
+            int stop = ctx.getStop().getTokenIndex();
 
+            if (parent.getClass().getSimpleName().equals("SuiteContext")) {
+                // El padre es la regla "suite"
 
-        for (int i = start; i <= start+2; i++) {
-            Token token = tokens.get(i);
+                for (int i = start; i <= start+2; i++) {
+                    Token token = tokens.get(i);
 
-            String text = token.getText();
+                    String text = token.getText();
 
-            System.out.print(text); // Imprimir el token con un espacio después
+                    System.out.print(text); // Imprimir el token con un espacio después
+                }
+            }
         }
         System.out.print("a");
 
