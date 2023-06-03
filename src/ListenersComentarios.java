@@ -169,7 +169,64 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterWhile_stmt(PythonParser.While_stmtContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
 
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                String comment = (" #Ciclo que dura mientras ");
+                String complemento = "";
+                String[] varios_condicionales = ctx.test().getText().split("and|or");
+
+                for (int a = 0; a < varios_condicionales.length; a++) {
+
+                    String[] partes = varios_condicionales[a].split("<>|==|>=|<=|!=|>|<");
+                    if(partes.length==2){
+                        String[] operador = varios_condicionales[a].split(partes[0])[1].split(partes[1]);
+                        if (operador[0].equals("<")){
+                            complemento+= partes[0] + " sea menor que " + partes[1];
+                        }
+                        else if (operador[0].equals(">")){
+                            complemento+= partes[0] + " sea mayor que " + partes[1];
+                        }
+                        else if (operador[0].equals("==")){
+                            complemento+= partes[0] + " sea igual que " + partes[1];
+                        }
+                        else if (operador[0].equals(">=")){
+                            complemento+= partes[0] + " sea mayor o igual que " + partes[1];
+                        }
+                        else if (operador[0].equals("<=")){
+                            complemento+= partes[0] + " sea menor o igual que " + partes[1];
+                        }
+                        else if (operador[0].equals("!=") || operador[0].equals("<>")){
+                            complemento+= partes[0] + " sea diferente de " + partes[1];
+                        }
+                    }
+                    else{
+                        complemento+= varios_condicionales[a];
+                    }
+                    if(a<varios_condicionales.length-1){
+                        String[] union = ctx.test().getText().split(varios_condicionales[a])[1].split(varios_condicionales[a+1]);
+                        if (union[0].equals("and")){
+                            complemento+= " y " ;
+                        }
+                        else if (union[0].equals("or")){
+                            complemento+= " o " ;
+                        }
+                    }
+
+
+                }
+
+                System.out.println(comment + complemento); // Imprimir el token con un espacio después
+                break;
+            }
+        }
     }
 
     @Override
@@ -221,7 +278,19 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterTry_stmt(PythonParser.Try_stmtContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
 
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                System.out.println(" #Bloque de codigo donde se pueden producir excepciones se va a tratar de correr las siguiente sentencias "); // Imprimir el token con un espacio después
+                break;
+            }
+        }
     }
 
     @Override
@@ -298,7 +367,7 @@ public class ListenersComentarios implements PythonParserListener {
             String text = token.getText();
             System.out.print(text); // Imprimir el token con un espacio después
             if (text.equals(":")) {
-                String comment = (" #Condicional al que se entra si ");
+                String comment = (" #Si no se entro al condicional anterior se entra a este si ");
                 String complemento ="";
                 String[] varios_condicionales = ctx.test().getText().split("and|or");
 
@@ -358,6 +427,38 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterElse_clause(PythonParser.Else_clauseContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+
+        if (ctx.getParent() != null && ctx.getParent().getParent().getParent().getParent() != null) {
+            ParserRuleContext parent = (ParserRuleContext) ctx.getParent().getParent().getParent().getParent();
+            int starti = ctx.getParent().getParent().getParent().getParent().getStart().getTokenIndex();
+            int stopi = ctx.getStop().getTokenIndex();
+
+            if (parent.getClass().getSimpleName().equals("SuiteContext")) {
+                // El padre es la regla "suite"
+
+                for (int i = starti; i <= starti+2; i++) {
+                    Token token = tokens.get(i);
+
+                    String text = token.getText();
+
+                    System.out.print(text); // Imprimir el token con un espacio después
+                }
+            }
+        }
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                System.out.println(" #Si no se cumple ninguna condicion anterior se ejecuta el siguiente bloque de codigo  "); // Imprimir el token con un espacio después
+                break;
+            }
+        }
 
     }
 
@@ -368,6 +469,34 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterFinally_clause(PythonParser.Finally_clauseContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+
+        if (ctx.getParent() != null && ctx.getParent().getParent().getParent().getParent() != null) {
+            ParserRuleContext parent = (ParserRuleContext) ctx.getParent().getParent().getParent().getParent();
+            int starti = ctx.getParent().getParent().getParent().getParent().getStart().getTokenIndex();
+
+            if (parent.getClass().getSimpleName().equals("SuiteContext")) {
+                // El padre es la regla "suite"
+
+                for (int i = starti; i <= starti+2; i++) {
+                    Token token = tokens.get(i);
+                    String text = token.getText();
+                    System.out.print(text); // Imprimir el token con un espacio después
+                }
+            }
+        }
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                System.out.println(" #Bloque opcional de codigo que siempre se ejecutara, sin importar si ocurrió una excepcion o no "); // Imprimir el token con un espacio después
+                break;
+            }
+        }
 
     }
 
@@ -388,7 +517,34 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterExcept_clause(PythonParser.Except_clauseContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
 
+        if (ctx.getParent() != null && ctx.getParent().getParent().getParent().getParent() != null) {
+            ParserRuleContext parent = (ParserRuleContext) ctx.getParent().getParent().getParent().getParent();
+            int starti = ctx.getParent().getParent().getParent().getParent().getStart().getTokenIndex();
+
+            if (parent.getClass().getSimpleName().equals("SuiteContext")) {
+                // El padre es la regla "suite"
+
+                for (int i = starti; i <= starti+2; i++) {
+                    Token token = tokens.get(i);
+                    String text = token.getText();
+                    System.out.print(text); // Imprimir el token con un espacio después
+                }
+            }
+        }
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                System.out.println(" #Manejo de la excepcion especifica " + ctx.test().getText()); // Imprimir el token con un espacio después
+                break;
+            }
+        }
     }
 
     @Override
@@ -398,6 +554,23 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterClassdef(PythonParser.ClassdefContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text); // Imprimir el token con un espacio después
+            if (text.equals(":")) {
+                if(ctx.name()!=null){
+
+                    System.out.println(" #Definicion de una clase llamada " + ctx.name().getText()); // Imprimir el token con un espacio después
+                }
+                break;
+            }
+        }
 
     }
 
@@ -419,7 +592,29 @@ public class ListenersComentarios implements PythonParserListener {
             System.out.print(text); // Imprimir el token con un espacio después
             if (text.equals(":")) {
                 if(ctx.typedargslist()!=null && ctx.typedargslist().def_parameters()!=null){
-                    System.out.println(" #Esta funcion mira si " + ctx.typedargslist().getText() + " "+ ctx.name().getText()); // Imprimir el token con un espacio después
+                    String nombre = ctx.name().getText();
+                    if(nombre.equals("__init__")){
+                        System.out.println(" #Define el metodo especial __init__, tambien conocido como el constructor de la clase. El primer parametro hace referencia a la propia instancia de la clase" );
+                    }
+                    else{
+                        String[] largo = ctx.typedargslist().getText().split(",");
+                        if(largo[0].equals("self")){
+                            System.out.print(" #Metodo de la clase. El primer parametro hace referencia a la propia instancia de la clase");
+
+                            if(largo.length>1){
+                                String[] parametros = ctx.typedargslist().getText().split(",",2);
+                                System.out.println(", otros parametros de la case son " + parametros[1]);
+                            }
+                            else{
+                                System.out.println();
+                            }
+                        }
+                        else{
+                            System.out.println(" #Esta funcion mira si " + ctx.typedargslist().getText() + " "+ nombre);
+                        }
+
+                    }
+
                 }
                 break;
             }
