@@ -77,14 +77,13 @@ public class ListenersComentarios implements PythonParserListener {
             int start = ctx.getParent().getParent().getStart().getTokenIndex();
 
             if (parent.getClass().getSimpleName().equals("SuiteContext")) {
-                // El padre es la regla "suite"
 
                 for (int i = start; i <= start+2; i++) {
                     Token token = tokens.get(i);
 
                     String text = token.getText();
 
-                    System.out.print(text); // Imprimir el token con un espacio después
+                    System.out.print(text);
                 }
             }
         }
@@ -378,23 +377,26 @@ public class ListenersComentarios implements PythonParserListener {
                     String[] partes = varios_condicionales[a].split("<>|==|>=|<=|!=|>|<");
                     if(partes.length==2){
                         String[] operador = varios_condicionales[a].split(partes[0])[1].split(partes[1]);
-                        if (operador[0].equals("<")){
-                            complemento.append(partes[0]).append(" es menor que ").append(partes[1]);
-                        }
-                        else if (operador[0].equals(">")){
-                            complemento.append(partes[0]).append(" es mayor que ").append(partes[1]);
-                        }
-                        else if (operador[0].equals("==")){
-                            complemento.append(partes[0]).append(" es igual que ").append(partes[1]);
-                        }
-                        else if (operador[0].equals(">=")){
-                            complemento.append(partes[0]).append(" es mayor o igual que ").append(partes[1]);
-                        }
-                        else if (operador[0].equals("<=")){
-                            complemento.append(partes[0]).append(" es menor o igual que ").append(partes[1]);
-                        }
-                        else if (operador[0].equals("!=") || operador[0].equals("<>")){
-                            complemento.append(partes[0]).append(" es diferente de ").append(partes[1]);
+                        switch (operador[0]) {
+                            case "<":
+                                complemento.append(partes[0]).append(" es menor que ").append(partes[1]);
+                                break;
+                            case ">":
+                                complemento.append(partes[0]).append(" es mayor que ").append(partes[1]);
+                                break;
+                            case "==":
+                                complemento.append(partes[0]).append(" es igual que ").append(partes[1]);
+                                break;
+                            case ">=":
+                                complemento.append(partes[0]).append(" es mayor o igual que ").append(partes[1]);
+                                break;
+                            case "<=":
+                                complemento.append(partes[0]).append(" es menor o igual que ").append(partes[1]);
+                                break;
+                            case "!=":
+                            case "<>":
+                                complemento.append(partes[0]).append(" es diferente de ").append(partes[1]);
+                                break;
                         }
                     }
                     else{
