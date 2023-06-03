@@ -75,7 +75,6 @@ public class ListenersComentarios implements PythonParserListener {
         if (ctx.getParent() != null && ctx.getParent().getParent() != null) {
             ParserRuleContext parent = (ParserRuleContext) ctx.getParent().getParent();
             int start = ctx.getParent().getParent().getStart().getTokenIndex();
-            int stop = ctx.getStop().getTokenIndex();
 
             if (parent.getClass().getSimpleName().equals("SuiteContext")) {
                 // El padre es la regla "suite"
@@ -111,7 +110,7 @@ public class ListenersComentarios implements PythonParserListener {
             System.out.print(text); // Imprimir el token con un espacio después
             if (text.equals(":")) {
                 String comment = (" #Condicional al que se entra si ");
-                String complemento ="";
+                StringBuilder complemento = new StringBuilder();
                 String[] varios_condicionales = ctx.test().getText().split("and|or");
 
                 for (int a = 0; a < varios_condicionales.length; a++) {
@@ -119,35 +118,38 @@ public class ListenersComentarios implements PythonParserListener {
                     String[] partes = varios_condicionales[a].split("<>|==|>=|<=|!=|>|<");
                     if(partes.length==2){
                         String[] operador = varios_condicionales[a].split(partes[0])[1].split(partes[1]);
-                        if (operador[0].equals("<")){
-                            complemento+= partes[0] + " es menor que " + partes[1];
-                        }
-                        else if (operador[0].equals(">")){
-                            complemento+= partes[0] + " es mayor que " + partes[1];
-                        }
-                        else if (operador[0].equals("==")){
-                            complemento+= partes[0] + " es igual que " + partes[1];
-                        }
-                        else if (operador[0].equals(">=")){
-                            complemento+= partes[0] + " es mayor o igual que " + partes[1];
-                        }
-                        else if (operador[0].equals("<=")){
-                            complemento+= partes[0] + " es menor o igual que " + partes[1];
-                        }
-                        else if (operador[0].equals("!=") || operador[0].equals("<>")){
-                            complemento+= partes[0] + " es diferente de " + partes[1];
+                        switch (operador[0]) {
+                            case "<":
+                                complemento.append(partes[0]).append(" es menor que ").append(partes[1]);
+                                break;
+                            case ">":
+                                complemento.append(partes[0]).append(" es mayor que ").append(partes[1]);
+                                break;
+                            case "==":
+                                complemento.append(partes[0]).append(" es igual que ").append(partes[1]);
+                                break;
+                            case ">=":
+                                complemento.append(partes[0]).append(" es mayor o igual que ").append(partes[1]);
+                                break;
+                            case "<=":
+                                complemento.append(partes[0]).append(" es menor o igual que ").append(partes[1]);
+                                break;
+                            case "!=":
+                            case "<>":
+                                complemento.append(partes[0]).append(" es diferente de ").append(partes[1]);
+                                break;
                         }
                     }
                     else{
-                        complemento+= varios_condicionales[a];
+                        complemento.append(varios_condicionales[a]);
                     }
                     if(a<varios_condicionales.length-1){
                         String[] union = ctx.test().getText().split(varios_condicionales[a])[1].split(varios_condicionales[a+1]);
                         if (union[0].equals("and")){
-                            complemento+= " y " ;
+                            complemento.append(" y ");
                         }
                         else if (union[0].equals("or")){
-                            complemento+= " o " ;
+                            complemento.append(" o ");
                         }
                     }
 
@@ -180,7 +182,7 @@ public class ListenersComentarios implements PythonParserListener {
             System.out.print(text); // Imprimir el token con un espacio después
             if (text.equals(":")) {
                 String comment = (" #Ciclo que dura mientras ");
-                String complemento = "";
+                StringBuilder complemento = new StringBuilder();
                 String[] varios_condicionales = ctx.test().getText().split("and|or");
 
                 for (int a = 0; a < varios_condicionales.length; a++) {
@@ -189,34 +191,34 @@ public class ListenersComentarios implements PythonParserListener {
                     if(partes.length==2){
                         String[] operador = varios_condicionales[a].split(partes[0])[1].split(partes[1]);
                         if (operador[0].equals("<")){
-                            complemento+= partes[0] + " sea menor que " + partes[1];
+                            complemento.append(partes[0]).append(" sea menor que ").append(partes[1]);
                         }
                         else if (operador[0].equals(">")){
-                            complemento+= partes[0] + " sea mayor que " + partes[1];
+                            complemento.append(partes[0]).append(" sea mayor que ").append(partes[1]);
                         }
                         else if (operador[0].equals("==")){
-                            complemento+= partes[0] + " sea igual que " + partes[1];
+                            complemento.append(partes[0]).append(" sea igual que ").append(partes[1]);
                         }
                         else if (operador[0].equals(">=")){
-                            complemento+= partes[0] + " sea mayor o igual que " + partes[1];
+                            complemento.append(partes[0]).append(" sea mayor o igual que ").append(partes[1]);
                         }
                         else if (operador[0].equals("<=")){
-                            complemento+= partes[0] + " sea menor o igual que " + partes[1];
+                            complemento.append(partes[0]).append(" sea menor o igual que ").append(partes[1]);
                         }
                         else if (operador[0].equals("!=") || operador[0].equals("<>")){
-                            complemento+= partes[0] + " sea diferente de " + partes[1];
+                            complemento.append(partes[0]).append(" sea diferente de ").append(partes[1]);
                         }
                     }
                     else{
-                        complemento+= varios_condicionales[a];
+                        complemento.append(varios_condicionales[a]);
                     }
                     if(a<varios_condicionales.length-1){
                         String[] union = ctx.test().getText().split(varios_condicionales[a])[1].split(varios_condicionales[a+1]);
                         if (union[0].equals("and")){
-                            complemento+= " y " ;
+                            complemento.append(" y ");
                         }
                         else if (union[0].equals("or")){
-                            complemento+= " o " ;
+                            complemento.append(" o ");
                         }
                     }
 
@@ -368,7 +370,7 @@ public class ListenersComentarios implements PythonParserListener {
             System.out.print(text); // Imprimir el token con un espacio después
             if (text.equals(":")) {
                 String comment = (" #Si no se entro al condicional anterior se entra a este si ");
-                String complemento ="";
+                StringBuilder complemento = new StringBuilder();
                 String[] varios_condicionales = ctx.test().getText().split("and|or");
 
                 for (int a = 0; a < varios_condicionales.length; a++) {
@@ -377,34 +379,34 @@ public class ListenersComentarios implements PythonParserListener {
                     if(partes.length==2){
                         String[] operador = varios_condicionales[a].split(partes[0])[1].split(partes[1]);
                         if (operador[0].equals("<")){
-                            complemento+= partes[0] + " es menor que " + partes[1];
+                            complemento.append(partes[0]).append(" es menor que ").append(partes[1]);
                         }
                         else if (operador[0].equals(">")){
-                            complemento+= partes[0] + " es mayor que " + partes[1];
+                            complemento.append(partes[0]).append(" es mayor que ").append(partes[1]);
                         }
                         else if (operador[0].equals("==")){
-                            complemento+= partes[0] + " es igual que " + partes[1];
+                            complemento.append(partes[0]).append(" es igual que ").append(partes[1]);
                         }
                         else if (operador[0].equals(">=")){
-                            complemento+= partes[0] + " es mayor o igual que " + partes[1];
+                            complemento.append(partes[0]).append(" es mayor o igual que ").append(partes[1]);
                         }
                         else if (operador[0].equals("<=")){
-                            complemento+= partes[0] + " es menor o igual que " + partes[1];
+                            complemento.append(partes[0]).append(" es menor o igual que ").append(partes[1]);
                         }
                         else if (operador[0].equals("!=") || operador[0].equals("<>")){
-                            complemento+= partes[0] + " es diferente de " + partes[1];
+                            complemento.append(partes[0]).append(" es diferente de ").append(partes[1]);
                         }
                     }
                     else{
-                        complemento+= varios_condicionales[a];
+                        complemento.append(varios_condicionales[a]);
                     }
                     if(a<varios_condicionales.length-1){
                         String[] union = ctx.test().getText().split(varios_condicionales[a])[1].split(varios_condicionales[a+1]);
                         if (union[0].equals("and")){
-                            complemento+= " y " ;
+                            complemento.append(" y ");
                         }
                         else if (union[0].equals("or")){
-                            complemento+= " o " ;
+                            complemento.append(" o ");
                         }
                     }
 
@@ -694,7 +696,6 @@ public class ListenersComentarios implements PythonParserListener {
         if (ctx.getParent() != null && ctx.getParent().getParent() != null) {
             ParserRuleContext parent = (ParserRuleContext) ctx.getParent().getParent();
             int start = ctx.getParent().getParent().getStart().getTokenIndex();
-            int stop = ctx.getStop().getTokenIndex();
 
             if (parent.getClass().getSimpleName().equals("SuiteContext")) {
                 // El padre es la regla "suite"
