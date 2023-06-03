@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import org.antlr.v4.runtime.*;
 
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class ListenersComentarios implements PythonParserListener {
@@ -513,7 +514,6 @@ public class ListenersComentarios implements PythonParserListener {
                 }
             }
         }
-        System.out.print("a");
 
 
     }
@@ -525,9 +525,207 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterExpr_stmt(PythonParser.Expr_stmtContext ctx) {
+        // Obtener los tokens
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text);
+        }
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+
+            if (i+7 <= stop){
+                Token t3 = tokens.get(i+7);
+                String p3 = t3.getText();
+                Token t4 = tokens.get(i+2);
+                String p4 = t4.getText();
+                Token t5 = tokens.get(i+4);
+                String p5 = t5.getText();
+                if (p3.equals(")") && p4.equals("(")){
+                    if(p5.equals(",")){
+                        Token t6 = tokens.get(i-3);
+                        String p6 = t6.getText();
+                        Token t7 = tokens.get(i+1);
+                        String p7 = t7.getText();
+                        Token t8 = tokens.get(i+3);
+                        String p8 = t8.getText();
+                        Token t9 = tokens.get(i+6);
+                        String p9 = t9.getText();
+                        System.out.print(" #Se define " + p6 + " con la funcion " + p7 + " que recibe los parametros " + p8 + " y " + p9);
+                        break;
+                    }
+                }else if (p4.equals("(") && i+9<=stop) {
+                    Token t10 = tokens.get(i+10);
+                    String p10 = t10.getText();
+                    if (p10.equals(")")){
+                        Token t11 = tokens.get(i+7);
+                        String p11 = t11.getText();
+                        if (p5.equals(",") && p11.equals(",")) {
+                            Token t6 = tokens.get(i - 3);
+                            String p6 = t6.getText();
+                            Token t7 = tokens.get(i + 1);
+                            String p7 = t7.getText();
+                            Token t8 = tokens.get(i + 3);
+                            String p8 = t8.getText();
+                            Token t9 = tokens.get(i + 6);
+                            String p9 = t9.getText();
+                            Token t12 = tokens.get(i+9);
+                            String p12 = t12.getText();
+                            System.out.print(" #Se define " + p6 + " con la funcion " + p7 + " que recibe los parametros " + p8 + " , " + p9 + " y " + p12);
+                            break;
+                        }
+                    }
+
+                }else if (text.equals("print")){
+                    System.out.print(" #Se imprime la siguiente informacion: ");
+                    for (int j = start+1; j <= stop; j++) {
+                        Token token1 = tokens.get(j);
+                        String text1 = token1.getText();
+                        System.out.print(text1);
+                    }
+                    break;
+                }
+            }else if (i + 2 <= stop) {
+                Token t1 = tokens.get(i + 2);
+                String p1 = t1.getText();
+                if (p1.equals("[")) {
+                    String textos = ctx.testlist_star_expr().getText();
+                    System.out.print(" #Lista: " + textos + " se define como lista.");
+                    break;
+                }else if (text.equals("append")) {
+                    Token t = tokens.get(i+2);
+                    String p = t.getText();
+                    Token token2 = tokens.get(i-2);
+                    String p2 = token2.getText();
+                    System.out.print(" #Lista: A la lista " + p2 + " se le agrega el valor " + p + " a la lista.");
+                    break;
+                }else if (text.equals("pop")) {
+                    Token t = tokens.get(i + 2);
+                    String p = t.getText();
+                    Token token2 = tokens.get(i - 2);
+                    String p2 = token2.getText();
+                    if (p.equals(")")){
+                        System.out.print(" #Lista: A la lista " + p2 + " se le elimina el ultimo valor de la lista.");
+                        break;
+                    }else{
+                        System.out.print(" #Lista: A la lista " + p2 + " se le elimina el valor con indice de valor '" + p + "' a la lista.");
+                        break;
+                    }
+                }else  if(text.equals("int")){
+                    Token textoI = tokens.get(i-2);
+                    String pI = textoI.getText();
+                    if(pI.equals("=")){
+                        Token t = tokens.get(i+2);
+                        String p = t.getText();
+                        Token token2 = tokens.get(i-4);
+                        String p2 = token2.getText();
+                        Token token3 = tokens.get(i+2);
+                        String p3 = token3.getText();
+                        if(p3.equals("input")){
+                            System.out.print(" #Se recibe una entrada que define la variable " + p2);
+                            break;
+                        }else{
+                            System.out.print(" #Expresion: Se define " + p2 + " como un entero igual " + p);
+                            break;
+                        }
+                    }else if(pI.equals("+=")){
+                        Token t = tokens.get(i+2);
+                        String p = t.getText();
+                        Token token2 = tokens.get(i-4);
+                        String p2 = token2.getText();
+                        System.out.print(" #Expresion: A la variable " + p2 + " se le suma " + p);
+                        break;
+                    }else if(pI.equals("-=")){
+                        Token t = tokens.get(i+2);
+                        String p = t.getText();
+                        Token token2 = tokens.get(i-4);
+                        String p2 = token2.getText();
+                        System.out.print(" #Expresion: A la variable " + p2 + " se le resta  " + p);
+                        break;
+                    }
+                }else if(text.equals("input")) {
+                    Token token3 = tokens.get(i - 4);
+                    String p3 = token3.getText();
+                    System.out.print(" #Se recibe una entrada que define la variable " + p3);
+                    break;
+                }else if (text.equals("print")){
+                    System.out.print(" #Se imprime la siguiente informacion: ");
+                    for (int j = start+1; j <= stop; j++) {
+                        Token token1 = tokens.get(j);
+                        String text1 = token1.getText();
+                        System.out.print(text1);
+                    }
+                    break;
+                }else if (text.equals("=") && p1.equals(" ")) {
+                    Token t = tokens.get(i+1);
+                    String p = t.getText();
+                    String textos = ctx.testlist_star_expr().getText();
+                    System.out.print(" #Expresion: " + textos + " se define igual a ");
+                    for (int j = start+2; j <= stop; j++) {
+                        Token token1 = tokens.get(j);
+                        String text1 = token1.getText();
+                        System.out.print(text1);
+                    }
+                    System.out.print(".");
+                    break;
+                } else if (text.equals("+=")) {
+                    Token t = tokens.get(i+1);
+                    String p = t.getText();
+                    String textos = ctx.testlist_star_expr().getText();
+                    System.out.print(" #Expresion: " + textos + " se le suma ");
+                    for (int j = start+2; j <= stop; j++) {
+                        Token token1 = tokens.get(j);
+                        String text1 = token1.getText();
+                        System.out.print(text1);
+                    }
+                    System.out.print(".");
+                    break;
+                } else if (text.equals("-=")) {
+                    Token t = tokens.get(i + 1);
+                    String p = t.getText();
+                    String textos = ctx.testlist_star_expr().getText();
+                    System.out.print(" #Expresion: " + textos + " se le suma ");
+                    for (int j = start+2; j <= stop; j++) {
+                        Token token1 = tokens.get(j);
+                        String text1 = token1.getText();
+                        System.out.print(text1);
+                    }
+                    System.out.print(".");
+                    break;
+                }
+            }else{
+                if (text.equals("=")) {
+                    Token t = tokens.get(i+1);
+                    String p = t.getText();
+                    String textos = ctx.testlist_star_expr().getText();
+                    System.out.print(" #Expresion: " + textos + " se define igual a " + p + " .");
+                    break;
+                } else if (text.equals("+=")) {
+                    Token t = tokens.get(i+1);
+                    String p = t.getText();
+                    String textos = ctx.testlist_star_expr().getText();
+                    System.out.print(" #Expresion: " + textos + " se le suma " + p + " .");
+                    break;
+                } else if (text.equals("-=")) {
+                    Token t = tokens.get(i + 1);
+                    String p = t.getText();
+                    String textos = ctx.testlist_star_expr().getText();
+                    System.out.print(" #Expresion: " + textos + "se le resta " + p + " .");
+                    break;
+                }
+
+            }
+        }
 
 
     }
+
 
     @Override
     public void exitExpr_stmt(PythonParser.Expr_stmtContext ctx) {
@@ -617,10 +815,22 @@ public class ListenersComentarios implements PythonParserListener {
     @Override
     public void enterImport_stmt(PythonParser.Import_stmtContext ctx) {
 
+
     }
 
     @Override
     public void exitImport_stmt(PythonParser.Import_stmtContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text);
+        }
+
+        System.out.print(" #Se importan librerias");
 
     }
 

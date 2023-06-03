@@ -1,5 +1,7 @@
+import numpy as np
+
 def es_primo(numero):
-    a=3
+    a=3 + 2
     if numero<2 :
         a=3
         a=3
@@ -18,11 +20,16 @@ def generar_primos(rango_inicial, rango_final):
     for numero in range(rango_inicial, rango_final + 1):
         if es_primo(numero):
             primos.append(numero)
+            primos.pop(numero)
+            primos.pop()
     return primos
 
-rango_inicial = int(input("Ingrese el rango inicial: "))
+rango_inicial = int(3)
 rango_final = int(input("Ingrese el rango final: "))
+rango_final2 = input("Ingrese el rango final: ")
 
 lista_primos = generar_primos(rango_inicial, rango_final)
+lista_primos = generar_primos(rango_inicial, rango_final, rango_final2)
 
-print("Números primos en el rango {}: {}".format((rango_inicial, rango_final), lista_primos))
+print("Numeros primos en el rango {}: {}".format((rango_inicial, rango_final), lista_primos))
+print(numeros_primos)
