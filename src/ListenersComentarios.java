@@ -801,7 +801,7 @@ public class ListenersComentarios implements PythonParserListener {
                     String p = t.getText();
                     Token token2 = tokens.get(i-2);
                     String p2 = token2.getText();
-                    System.out.print(" #Lista: A la lista " + p2 + " se le agrega el valor " + p + " a la lista.");
+                    System.out.print(" #Lista: A la lista " + p2 + " se le agrega el valor " + p + " a la lista");
                     break;
                 }else if (text.equals("pop")) {
                     Token t = tokens.get(i + 2);
@@ -809,10 +809,10 @@ public class ListenersComentarios implements PythonParserListener {
                     Token token2 = tokens.get(i - 2);
                     String p2 = token2.getText();
                     if (p.equals(")")){
-                        System.out.print(" #Lista: A la lista " + p2 + " se le elimina el ultimo valor de la lista.");
+                        System.out.print(" #Lista: A la lista " + p2 + " se le elimina el ultimo valor de la lista");
                         break;
                     }else{
-                        System.out.print(" #Lista: A la lista " + p2 + " se le elimina el valor con indice de valor '" + p + "' a la lista.");
+                        System.out.print(" #Lista: A la lista " + p2 + " se le elimina el valor con indice de valor '" + p + "' a la lista");
                         break;
                     }
                 }else  if(text.equals("int")){
@@ -902,19 +902,19 @@ public class ListenersComentarios implements PythonParserListener {
                     Token t = tokens.get(i+1);
                     String p = t.getText();
                     String textos = ctx.testlist_star_expr().getText();
-                    System.out.print(" #Expresion: " + textos + " se define igual a " + p + " .");
+                    System.out.print(" #Expresion: " + textos + " se define igual a " + p );
                     break;
                 } else if (text.equals("+=")) {
                     Token t = tokens.get(i+1);
                     String p = t.getText();
                     String textos = ctx.testlist_star_expr().getText();
-                    System.out.print(" #Expresion: " + textos + " se le suma " + p + " .");
+                    System.out.print(" #Expresion: " + textos + " se le suma " + p );
                     break;
                 } else if (text.equals("-=")) {
                     Token t = tokens.get(i + 1);
                     String p = t.getText();
                     String textos = ctx.testlist_star_expr().getText();
-                    System.out.print(" #Expresion: " + textos + "se le resta " + p + " .");
+                    System.out.print(" #Expresion: " + textos + "se le resta " + p);
                     break;
                 }
 
