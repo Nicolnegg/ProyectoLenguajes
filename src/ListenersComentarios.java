@@ -624,6 +624,9 @@ public class ListenersComentarios implements PythonParserListener {
                     }
 
                 }
+                else{
+                    System.out.println(" #Se define funcion " + ctx.name().getText());
+                }
                 break;
             }
         }

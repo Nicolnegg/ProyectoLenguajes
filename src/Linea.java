@@ -4,13 +4,13 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 public class Linea {
-    public static void Linea() throws Exception {;
-        String args= "a=3";
+    public static void main(String[] args) throws Exception {
+        String linea= "a=3";
         // create a CharStream that reads from standard input / file
         // create a lexer that feeds off of input CharStream
         PythonLexer lexer;
 
-        lexer = new PythonLexer(CharStreams.fromString(args));
+        lexer = new PythonLexer(CharStreams.fromString(linea));
 
         // create a buffer of tokens pulled from the lexer
         CommonTokenStream tokens = new CommonTokenStream(lexer);

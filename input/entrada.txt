@@ -1,60 +1,20 @@
-import numpy as np
-class MiClase:
-    def init(mi_instancia, nombre):
-        mi_instancia.nombre = nombre
+def main():
 
-    def saludar(mi_instancia):
-        print("Hola, mi nombre es", mi_instancia.nombre)
+    nombre = "Juan"
+    edad = 25
+    altura = 1.75
+    es_estudiante = True
 
+    # Imprimir los valores de las variables
+    print("Nombre:", nombre)
+    print("Edad:", edad)
+    print("Altura:", altura)
+    print("Es estudiante:", es_estudiante)
 
+    # Realizar cálculos con las variables
+    edad_en_10_anios = edad + 10
+    altura_metros = altura * 100
 
-def es_primo(numero):
-    a=    3 +5     + 2
-    if numero<2 :
-        a=3
-        a=3
-        return False
-    elif numero<2 :
-         a=3
-         a=3
-         return False
-    for i in range(2, int(numero**0.5) + 1):
-        if numero % i == 0:
-            return False
-    return True
-
-def generar_primos(rango_inicial, rango_final):
-    primos = []
-    for numero in range(rango_inicial, rango_final + 1):
-        if es_primo(numero):
-            primos.append(numero)
-            primos.pop(numero)
-            primos.pop()
-    return primos
-
-rango_inicial = int(3)
-rango_final = int(input("Ingrese el rango final: "))
-rango_final2 = input("Ingrese el rango final: ")
-
-lista_primos = generar_primos(rango_inicial, rango_final)
-lista_primos = generar_primos(rango_inicial, rango_final, rango_final2)
-
-print("Numeros primos en el rango {}: {}".format((rango_inicial, rango_final), lista_primos))
-print(numeros_primos)
-while a<3:
-    i+=1
-
-if (a>3):
-    try:
-        # Bloque de código donde se pueden producir excepciones
-        resultado = 10 / 0  # Intentamos dividir entre cero, lo cual generará una excepción
-        print("El resultado es:", resultado)  # Esta línea no se ejecutará debido a la excepción
-    except ZeroDivisionError:
-        # Manejo de la excepción específica ZeroDivisionError
-        print("Error: No se puede dividir entre cero")
-    except Exception as e:
-        # Manejo de cualquier otra excepción no capturada por las cláusulas anteriores
-        print("Ocurrió un error:", str(e))
-    finally:
-        # Bloque opcional de código que siempre se ejecutará, sin importar si ocurrió una excepción o no
-        print("Fin del programa")
+    # Imprimir los resultados de los cálculos
+    print("Edad en 10 años:", edad_en_10_anios)
+    print("Altura en centímetros:", altura_metros)
