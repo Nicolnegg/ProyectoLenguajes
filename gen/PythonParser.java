@@ -1,4 +1,4 @@
-// Generated from D:/Trabajos UN/2023-1/Lenguajes de programación/ProyectoLenguajes/grammar\PythonParser.g4 by ANTLR 4.12.0
+// Generated from C:/Users/Nicol/Documents/Lenguajes/ProyectoLenguajes/grammar\PythonParser.g4 by ANTLR 4.12.0
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;

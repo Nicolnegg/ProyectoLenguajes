@@ -3,7 +3,9 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class Main {
@@ -15,7 +17,14 @@ public class Main {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                InterfazProyecto Primer = new InterfazProyecto();
+                InterfazProyecto Primer = null;
+                try {
+                    Primer = new InterfazProyecto();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (FontFormatException e) {
+                    throw new RuntimeException(e);
+                }
                 Primer.setVisible(true);
             }
         });
