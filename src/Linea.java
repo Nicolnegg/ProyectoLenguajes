@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 public class Linea {
     public static void main(String[] args) throws Exception {
-        String linea= "a=3";
+        String linea= "a+=3";
         // create a CharStream that reads from standard input / file
         // create a lexer that feeds off of input CharStream
         PythonLexer lexer;

@@ -14,6 +14,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+
 public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public  List<String> variables_global = new ArrayList<>();
     public  List<String> valores_global = new ArrayList<>();
@@ -24,8 +25,10 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
         ScriptEngine engine = manager.getEngineByName("JavaScript");
         if(ctx.testlist_star_expr()!=null){
             if(ctx.assign_part()!=null){
-                String valorText= ctx.testlist_star_expr().getText();
-                Object valor = engine.eval(valorText);
+                String valorText= ctx.assign_part().getText();
+                String[] valordiv= valorText.split("=");
+                //valordiv[0] queda eelmoperador, valordiv[1] queda la asignacion
+                Object valor = engine.eval("3+5-6");
                 valores_global.add((String) valor);
                 String variable = ctx.testlist_star_expr().getText();
                 variables_global.add(variable);
