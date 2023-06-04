@@ -23,16 +23,32 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public Void visitExpr_stmt(PythonParser.Expr_stmtContext ctx) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
+        valores_global.add("1");
+        variables_global.add("a");
         if(ctx.testlist_star_expr()!=null){
             if(ctx.assign_part()!=null){
                 String valorText= ctx.assign_part().getText();
                 String[] valordiv= valorText.split("=");
                 //valordiv[0] queda eelmoperador, valordiv[1] queda la asignacion
                 Object valor = engine.eval(valordiv[1]);
-                System.out.println(valor);
-                valores_global.add(valor.toString());
                 String variable = ctx.testlist_star_expr().getText();
-                variables_global.add(variable);
+                if(variables_global.contains(variable)){
+                    System.out.println(valores_global.get(0));
+                    if(!valordiv[0].equals("")){
+                        int posicion = variables_global.indexOf(variable);
+                        valores_global.set(posicion,valor.toString());
+                        variables_global.add(posicion,variable);
+                        System.out.println(valores_global.get(posicion));
+
+                    }else{
+
+                    }
+                }
+                else if(!valordiv[0].equals("")){
+                    throw new RuntimeException("Error: No se pueden realizar operaciones con variables inexistentes");
+                }
+
+
             }
         }
         return super.visitExpr_stmt(ctx);
