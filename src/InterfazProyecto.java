@@ -3,6 +3,8 @@ import javax.swing.border.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,23 +21,41 @@ public class InterfazProyecto extends JFrame {
 
     private Map<String, Object> variables = new HashMap<>();
 
-    public InterfazProyecto() {
+    public InterfazProyecto() throws IOException, FontFormatException {
         setTitle("Analizador código Python");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1500, 700));
 
         JPanel contentPane = new JPanel(new BorderLayout());
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-        contentPane.setBackground(Color.decode("#1e2227"));
+        contentPane.setBackground(Color.decode("#FFFFFF"));
 
         setContentPane(contentPane);
 
-        // Agregar el texto "Bienvenidos a un analizador de Python Tutor" en la parte superior
-        JLabel welcomeLabel = new JLabel("ANALIZADOR CODIGO PYTHON");
-        welcomeLabel.setForeground(Color.WHITE);
-        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        contentPane.add(welcomeLabel, BorderLayout.NORTH);
+        // Crear un objeto ImageIcon con la ruta de la imagen
+        ImageIcon icono = new ImageIcon("imagenes/Logo.png");
+        ImageIcon python = new ImageIcon("imagenes/PythonLogo.png");
+        Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("imagenes/Snowstorm.otf"));
+
+
+        // Crear un JPanel con BoxLayout horizontal
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+
+
+        JLabel iconoLabel = new JLabel(icono);
+        JLabel textLabel = new JLabel("ANALIZA Y ENTIENDE TU CODIGO DE PYTHON");
+        textLabel.setForeground(Color.decode("#306998"));
+        textLabel.setFont(customFont.deriveFont(Font.PLAIN, 30));
+        JLabel logoLabel = new JLabel(python);
+
+        panel.add(iconoLabel);
+        panel.add(textLabel);
+        panel.add(Box.createHorizontalGlue());
+        panel.add(logoLabel);
+
+
+        contentPane.add(panel, BorderLayout.NORTH);
 
         // Agregar el mensaje de información
         JLabel infoLabel = new JLabel("Aquí puedes hacer bla bla bla");
@@ -211,7 +231,14 @@ public class InterfazProyecto extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            InterfazProyecto example = new InterfazProyecto();
+            InterfazProyecto example = null;
+            try {
+                example = new InterfazProyecto();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (FontFormatException e) {
+                throw new RuntimeException(e);
+            }
             example.setVisible(true);
         });
     }
