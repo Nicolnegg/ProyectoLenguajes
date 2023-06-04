@@ -114,7 +114,7 @@ public class ListenersComentarios implements PythonParserListener {
             if (text.equals(":")) {
                 String comment = (" #Condicional al que se entra si ");
                 StringBuilder complemento = new StringBuilder();
-                String[] varios_condicionales = ctx.test().getText().split("and|or");
+                String[] varios_condicionales = ctx.test().getText().replaceAll("[()]", "").split("and|or");;
 
                 for (int a = 0; a < varios_condicionales.length; a++) {
 
@@ -186,7 +186,7 @@ public class ListenersComentarios implements PythonParserListener {
             if (text.equals(":")) {
                 String comment = (" #Ciclo que dura mientras ");
                 StringBuilder complemento = new StringBuilder();
-                String[] varios_condicionales = ctx.test().getText().split("and|or");
+                String[] varios_condicionales = ctx.test().getText().replaceAll("[()]", "").split("and|or");;
 
                 for (int a = 0; a < varios_condicionales.length; a++) {
 
@@ -374,7 +374,7 @@ public class ListenersComentarios implements PythonParserListener {
             if (text.equals(":")) {
                 String comment = (" #Si no se entro al condicional anterior se entra a este si ");
                 StringBuilder complemento = new StringBuilder();
-                String[] varios_condicionales = ctx.test().getText().split("and|or");
+                String[] varios_condicionales = ctx.test().getText().replaceAll("[()]", "").split("and|or");;
 
                 for (int a = 0; a < varios_condicionales.length; a++) {
 

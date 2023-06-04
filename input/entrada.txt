@@ -1,7 +1,15 @@
 import numpy as np
+class MiClase:
+    def init(mi_instancia, nombre):
+        mi_instancia.nombre = nombre
+
+    def saludar(mi_instancia):
+        print("Hola, mi nombre es", mi_instancia.nombre)
+
+
 
 def es_primo(numero):
-    a=3 + 2
+    a=    3 +5     + 2
     if numero<2 :
         a=3
         a=3
@@ -33,3 +41,20 @@ lista_primos = generar_primos(rango_inicial, rango_final, rango_final2)
 
 print("Numeros primos en el rango {}: {}".format((rango_inicial, rango_final), lista_primos))
 print(numeros_primos)
+while a<3:
+    i+=1
+
+if (a>3):
+    try:
+        # Bloque de código donde se pueden producir excepciones
+        resultado = 10 / 0  # Intentamos dividir entre cero, lo cual generará una excepción
+        print("El resultado es:", resultado)  # Esta línea no se ejecutará debido a la excepción
+    except ZeroDivisionError:
+        # Manejo de la excepción específica ZeroDivisionError
+        print("Error: No se puede dividir entre cero")
+    except Exception as e:
+        # Manejo de cualquier otra excepción no capturada por las cláusulas anteriores
+        print("Ocurrió un error:", str(e))
+    finally:
+        # Bloque opcional de código que siempre se ejecutará, sin importar si ocurrió una excepción o no
+        print("Fin del programa")
