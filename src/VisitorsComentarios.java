@@ -28,7 +28,8 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                 String valorText= ctx.assign_part().getText();
                 String[] valordiv= valorText.split("=");
                 //valordiv[0] queda eelmoperador, valordiv[1] queda la asignacion
-                Object valor = engine.eval("3+5-6");
+                Object valor = engine.eval(valordiv[1]);
+                System.out.println(valor);
                 valores_global.add(valor.toString());
                 String variable = ctx.testlist_star_expr().getText();
                 variables_global.add(variable);
