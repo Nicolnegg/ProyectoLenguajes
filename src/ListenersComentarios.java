@@ -111,7 +111,7 @@ public class ListenersComentarios implements PythonParserListener {
             if (text.equals(":")) {
                 String comment = (" #Condicional al que se entra si ");
                 StringBuilder complemento = new StringBuilder();
-                String[] varios_condicionales = ctx.test().getText().split("and|or");
+                String[] varios_condicionales = ctx.test().getText().replaceAll("[()]", "").split("and|or");
 
                 for (int a = 0; a < varios_condicionales.length; a++) {
 
@@ -183,7 +183,7 @@ public class ListenersComentarios implements PythonParserListener {
             if (text.equals(":")) {
                 String comment = (" #Ciclo que dura mientras ");
                 StringBuilder complemento = new StringBuilder();
-                String[] varios_condicionales = ctx.test().getText().split("and|or");
+                String[] varios_condicionales = ctx.test().getText().replaceAll("[()]", "").split("and|or");
 
                 for (int a = 0; a < varios_condicionales.length; a++) {
 
@@ -371,7 +371,7 @@ public class ListenersComentarios implements PythonParserListener {
             if (text.equals(":")) {
                 String comment = (" #Si no se entro al condicional anterior se entra a este si ");
                 StringBuilder complemento = new StringBuilder();
-                String[] varios_condicionales = ctx.test().getText().split("and|or");
+                String[] varios_condicionales = ctx.test().getText().replaceAll("[()]", "").split("and|or");
 
                 for (int a = 0; a < varios_condicionales.length; a++) {
 
@@ -498,7 +498,7 @@ public class ListenersComentarios implements PythonParserListener {
             String text = token.getText();
             System.out.print(text); // Imprimir el token con un espacio después
             if (text.equals(":")) {
-                System.out.println(" #Bloque opcional de codigo que siempre se ejecutara, sin importar si ocurrió una excepcion o no "); // Imprimir el token con un espacio después
+                System.out.println(" #Bloque opcional de codigo que siempre se ejecutara, sin importar si ocurrio una excepcion o no "); // Imprimir el token con un espacio después
                 break;
             }
         }
