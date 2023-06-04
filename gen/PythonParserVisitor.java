@@ -1,6 +1,8 @@
 // Generated from C:/Users/Nicol/Documents/Lenguajes/ProyectoLenguajes/grammar\PythonParser.g4 by ANTLR 4.12.0
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
+import javax.script.ScriptException;
+
 /**
  * This interface defines a complete generic visitor for a parse tree produced
  * by {@link PythonParser}.
@@ -189,7 +191,7 @@ public interface PythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpr_stmt(PythonParser.Expr_stmtContext ctx);
+	T visitExpr_stmt(PythonParser.Expr_stmtContext ctx) throws ScriptException;
 	/**
 	 * Visit a parse tree produced by the {@code print_stmt}
 	 * labeled alternative in {@link PythonParser#small_stmt}.
