@@ -4,6 +4,8 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
+
+import javax.script.ScriptException;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -2371,7 +2373,13 @@ public class PythonParser extends PythonParserBase {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonParserVisitor ) return ((PythonParserVisitor<? extends T>)visitor).visitExpr_stmt(this);
+			if ( visitor instanceof PythonParserVisitor ) {
+				try {
+					return ((PythonParserVisitor<? extends T>)visitor).visitExpr_stmt(this);
+				} catch (ScriptException e) {
+					throw new RuntimeException(e);
+				}
+			}
 			else return visitor.visitChildren(this);
 		}
 	}
