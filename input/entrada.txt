@@ -1,25 +1,20 @@
-def calculate_factorial(n):
-    factorial = 1
-    for i in range(1, n+1):
-        factorial *= i
-    return factorial
-
-def calculate_sqrt(x):
-    return math.sqrt(x)
-
 def main():
-    print("Bienvenido al programa de cálculos avanzados.")
-    print("Por favor, ingrese un número para calcular su factorial:")
-    number = int(input())
-    result = calculate_factorial(number)
-    print(f"El factorial de {number} es: {result}")
 
-    print("\nAhora ingresaremos un número para calcular su raíz cuadrada:")
-    number = float(input())
-    result = calculate_sqrt(number)
-    print(f"La raíz cuadrada de {number} es: {result}")
+    nombre = "Juan"
+    edad = 25
+    altura = 1.75
+    es_estudiante = True
 
-    print("\n¡Gracias por usar nuestro programa!")
+    # Imprimir los valores de las variables
+    print("Nombre:", nombre)
+    print("Edad:", edad)
+    print("Altura:", altura)
+    print("Es estudiante:", es_estudiante)
 
-if name == "main":
-    main()
+    # Realizar cálculos con las variables
+    edad_en_10_anios = edad + 10
+    altura_metros = altura * 100
+
+    # Imprimir los resultados de los cálculos
+    print("Edad en 10 años:", edad_en_10_anios)
+    print("Altura en centímetros:", altura_metros)

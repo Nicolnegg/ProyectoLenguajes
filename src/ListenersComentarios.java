@@ -759,11 +759,45 @@ public class ListenersComentarios implements PythonParserListener {
         for (int i = 0; i < finalTokensSize; i++) {
             String text = finalTokens.get(i);
             String siguiente = finalTokens.get(i+1);
-                if (siguiente.equals("[")) {
+                if (siguiente.equals("{")) {
                     if (text.equals("=")){
+                        if(finalTokensSize>4) {
+                            if (finalTokens.get(i + 3).equals(",")) {
+                                String textos = ctx.testlist_star_expr().getText();
+                                System.out.print(" #Diccionario: '" + textos + "' se define igual a ");
+                                int j = i + 1;  // Iniciar j desde donde comienza el siguiente string
+                                for (; j < finalTokensSize; j++) {
+                                    String text1 = finalTokens.get(j);
+                                    System.out.print(text1);
+                                }
+                                System.out.print(".");
+                                break;
+                            }
+                        }
+                    }else{
                         String textos = ctx.testlist_star_expr().getText();
-                        System.out.print(" #Lista: " + textos + " se define como lista.");
+                        System.out.print(" #Diccionario: " + textos + " se define como diccionario.");
                         break;
+                    }
+                }else if (siguiente.equals("[")) {
+                    if (text.equals("=")){
+                        if(finalTokensSize>4){
+                            if(finalTokens.get(i+3).equals(",")) {
+                                String textos = ctx.testlist_star_expr().getText();
+                                System.out.print(" #Tupla: '" + textos + "' se define igual a ");
+                                int j = i + 1;  // Iniciar j desde donde comienza el siguiente string
+                                for (; j < finalTokensSize; j++) {
+                                    String text1 = finalTokens.get(j);
+                                    System.out.print(text1);
+                                }
+                                System.out.print(".");
+                                break;
+                            }
+                        }else{
+                            String textos = ctx.testlist_star_expr().getText();
+                            System.out.print(" #Lista: " + textos + " se define como lista.");
+                            break;
+                        }
                     }
                 }else if(siguiente.contains("'")){
                     if (text.equals("=")){
@@ -879,7 +913,17 @@ public class ListenersComentarios implements PythonParserListener {
                 } else if (text.equals("-=")) {
                     String p = finalTokens.get(i + 1);
                     String textos = ctx.testlist_star_expr().getText();
-                    System.out.print(" #Expresion: " + textos + "se le resta " + p + ".");
+                    System.out.print(" #Expresion: " + textos + " se le resta " + p + ".");
+                    break;
+                } else if (text.equals("*=")) {
+                    String p = finalTokens.get(i + 1);
+                    String textos = ctx.testlist_star_expr().getText();
+                    System.out.print(" #Expresion: " + textos + " se le multiplica " + p + ".");
+                    break;
+                } else if (text.equals("/=")) {
+                    String p = finalTokens.get(i + 1);
+                    String textos = ctx.testlist_star_expr().getText();
+                    System.out.print(" #Expresion: " + textos + " se le divide " + p + ".");
                     break;
                 }
 
@@ -917,11 +961,22 @@ public class ListenersComentarios implements PythonParserListener {
     @Override
     public void enterPass_stmt(PythonParser.Pass_stmtContext ctx) {
 
+
     }
 
     @Override
     public void exitPass_stmt(PythonParser.Pass_stmtContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
 
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text);
+        }
+
+        System.out.print(" #Se realiza un pass");
     }
 
     @Override
@@ -1036,6 +1091,33 @@ public class ListenersComentarios implements PythonParserListener {
 
     @Override
     public void enterGlobal_stmt(PythonParser.Global_stmtContext ctx) {
+        TokenStream tokens = parser.getTokenStream();
+        int start = ctx.getStart().getTokenIndex();
+        int stop = ctx.getStop().getTokenIndex();
+
+        for (int i = start; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+            System.out.print(text);
+        }
+
+        List<String> finalTokens = new ArrayList<>();
+
+        for (int i = start+1; i <= stop; i++) {
+            Token token = tokens.get(i);
+            String text = token.getText();
+
+            text = text.replaceAll("\\s+", "");
+
+            if (!text.isEmpty()) {
+                text = text.replaceAll("[(),]", ""); // Eliminar comas y paréntesis
+                if (!text.isEmpty()) {
+                    finalTokens.add(text);
+                }
+            }
+        }
+
+        System.out.print(" #Se define como global: " + finalTokens.get(1));
 
     }
 
