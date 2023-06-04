@@ -3,6 +3,9 @@ import javax.swing.border.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,11 +19,13 @@ public class InterfazProyecto extends JFrame {
     private JTextArea lineNumbersTextArea;
     private JPanel pythonTutorPanel;
     private JButton button;
+    private JTextArea textAreaResult;
 
     private Map<String, Object> variables = new HashMap<>();
+    private PrintStream consolePrintStream;
 
     public InterfazProyecto() {
-        setTitle("Analizador código Python");
+        setTitle("Analizador de código Python");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1500, 700));
 
@@ -31,7 +36,7 @@ public class InterfazProyecto extends JFrame {
         setContentPane(contentPane);
 
         // Agregar el texto "Bienvenidos a un analizador de Python Tutor" en la parte superior
-        JLabel welcomeLabel = new JLabel("ANALIZADOR CODIGO PYTHON");
+        JLabel welcomeLabel = new JLabel("ANALIZADOR DE CÓDIGO PYTHON");
         welcomeLabel.setForeground(Color.WHITE);
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -67,14 +72,21 @@ public class InterfazProyecto extends JFrame {
         JScrollPane scrollPane1 = new JScrollPane(textArea1);
         textAreasPanel.add(scrollPane1);
 
-        JPanel emptyPanel = new JPanel();
-        emptyPanel.setBackground(Color.decode("#1e2227"));
-        textAreasPanel.add(emptyPanel);
+        // Reemplazar el panel vacío con un JScrollPane que contiene un JTextArea
+        JScrollPane scrollPane2 = new JScrollPane();
+        textAreaResult = new JTextArea();
+        scrollPane2.setViewportView(textAreaResult);
+        textAreaResult.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        textAreaResult.setBackground(Color.decode("#23272e"));
+        textAreaResult.setForeground(Color.white);
+        textAreaResult.setEditable(false);
+
+        textAreasPanel.add(scrollPane2);
 
         variablesPanel = new JPanel();
         variablesPanel.setLayout(new BoxLayout(variablesPanel, BoxLayout.Y_AXIS));
-        JScrollPane scrollPane2 = new JScrollPane(variablesPanel);
-        textAreasPanel.add(scrollPane2);
+        JScrollPane scrollPane3 = new JScrollPane(variablesPanel);
+        textAreasPanel.add(scrollPane3);
 
         textAreaPanel.add(textAreasPanel, BorderLayout.CENTER);
 
@@ -93,6 +105,16 @@ public class InterfazProyecto extends JFrame {
 
         pack();
         setLocationRelativeTo(null);
+
+        // Redirigir la salida estándar a textAreaResult
+        consolePrintStream = new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                textAreaResult.append(String.valueOf((char) b));
+                textAreaResult.setCaretPosition(textAreaResult.getDocument().getLength());
+            }
+        });
+        System.setOut(consolePrintStream);
     }
 
     private void updateLineNumbers() {
