@@ -9,55 +9,49 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class Main {
+    private static InterfazProyecto interfazProyecto;
+
     public static void main(String[] args) throws Exception {
-        // create a CharStream that reads from standard input / file
-        // create a lexer that feeds off of input CharStream
         PythonLexer lexer;
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                InterfazProyecto Primer = null;
+                interfazProyecto = null;
                 try {
-                    Primer = new InterfazProyecto();
+                    interfazProyecto = new InterfazProyecto();
+                    InterfazProyecto.button.addActionListener(e -> {
+                        String texto = interfazProyecto.getTextoTextArea1();
+                        InterfazProyecto.textAreaResult.setText("");
+
+                        CharStream input = CharStreams.fromString(texto);
+                        PythonLexer lexer = new PythonLexer(input);
+                        CommonTokenStream tokens = new CommonTokenStream(lexer);
+                        PythonParser parser = new PythonParser(tokens);
+                        ParseTree tree = parser.root();
+
+                        TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), tree);
+                        viewer.open();
+
+                        ParseTreeWalker walker = new ParseTreeWalker();
+                        walker.walk(new ListenersComentarios(parser), tree);
+                        System.out.println();
+
+                        VisitorsComentarios visitor = new VisitorsComentarios();
+                        visitor.visit(tree);
+
+                        // Otras acciones con el resultado obtenido
+
+
+                    });
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 } catch (FontFormatException e) {
                     throw new RuntimeException(e);
                 }
-                Primer.setVisible(true);
+                interfazProyecto.setVisible(true);
             }
         });
-
-
-
-        if (args.length>0)
-            lexer = new PythonLexer(CharStreams.fromFileName(args[0]));
-        else
-            lexer = new PythonLexer(CharStreams.fromStream(System.in));
-        // create a buffer of tokens pulled from the lexer
-
-
-        CommonTokenStream tokens = new CommonTokenStream((TokenSource) lexer);
-        // create a parser that feeds off the tokens buffer
-        PythonParser parser = new PythonParser(tokens);
-        ParseTree tree = parser.root(); // begin parsing at init rule
-
-        // Mostrar el árbol en una vista gráfica
-        TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), tree);
-        viewer.open();
-
-        // Create a generic parse tree walker that can trigger callbacks
-        ParseTreeWalker walker = new ParseTreeWalker();
-        // Walk the tree created during the parse, trigger callbacks
-        walker.walk(new ListenersComentarios(parser), tree);
-        System.out.println(); // print a \n after translation
-
-
-        VisitorsComentarios visitor = new VisitorsComentarios();
-        visitor.visit(tree);
-
-
 
     }
 }

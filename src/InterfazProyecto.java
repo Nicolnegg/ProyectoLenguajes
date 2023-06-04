@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,8 +21,8 @@ public class InterfazProyecto extends JFrame {
     private JPanel variablesPanel;
     private JTextArea lineNumbersTextArea;
     private JPanel pythonTutorPanel;
-    private JButton button;
-    private JTextArea textAreaResult;
+    public static JButton button;
+    public static JTextArea textAreaResult;
 
     private Map<String, Object> variables = new HashMap<>();
     private PrintStream consolePrintStream;
@@ -61,13 +62,6 @@ public class InterfazProyecto extends JFrame {
 
 
         contentPane.add(panel, BorderLayout.NORTH);
-
-        // Agregar el mensaje de información
-        JLabel infoLabel = new JLabel("Aquí puedes hacer bla bla bla");
-        infoLabel.setForeground(Color.WHITE);
-        infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        infoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        contentPane.add(infoLabel, BorderLayout.CENTER);
 
         JPanel textAreaPanel = new JPanel(new BorderLayout());
 
@@ -210,22 +204,37 @@ public class InterfazProyecto extends JFrame {
                 if (variables.get(variable) instanceof List) {
                     List<Object> lista = (List<Object>) variables.get(variable);
                     for (Object elemento : lista) {
-                        JLabel valueBox = new JLabel(elemento.toString());
-                        valueBox.setPreferredSize(new Dimension(30, 30));
+                        String valorElemento = elemento.toString();
+                        JLabel valueBox = new JLabel(valorElemento);
                         valueBox.setOpaque(true);
                         valueBox.setBackground(getRandomPastelColor());
                         valueBox.setBorder(BorderFactory.createLineBorder(Color.black));
                         valueBox.setHorizontalAlignment(SwingConstants.CENTER);
                         variablePanel.add(valueBox);
+
+                        // Ajustar el tamaño de la caja del valueBox al contenido
+                        FontMetrics fontMetrics = valueBox.getFontMetrics(valueBox.getFont());
+                        int textWidth = fontMetrics.stringWidth(valorElemento);
+                        int textHeight = fontMetrics.getHeight();
+                        int boxWidth = textWidth + 20; // Aumentar el ancho en 10 píxeles para dar espacio adicional
+                        int boxHeight = textHeight + 20; // Aumentar la altura en 10 píxeles para dar espacio adicional
+                        valueBox.setPreferredSize(new Dimension(boxWidth, boxHeight));
                     }
                 } else {
                     JLabel valueBox = new JLabel(valor);
-                    valueBox.setPreferredSize(new Dimension(30, 30));
                     valueBox.setOpaque(true);
                     valueBox.setBackground(getRandomPastelColor());
                     valueBox.setBorder(BorderFactory.createLineBorder(Color.black));
                     valueBox.setHorizontalAlignment(SwingConstants.CENTER);
                     variablePanel.add(valueBox);
+
+                    // Ajustar el tamaño de la caja del valueBox al contenido
+                    FontMetrics fontMetrics = valueBox.getFontMetrics(valueBox.getFont());
+                    int textWidth = fontMetrics.stringWidth(valor);
+                    int textHeight = fontMetrics.getHeight();
+                    int boxWidth = textWidth + 20; // Aumentar el ancho en 10 píxeles para dar espacio adicional
+                    int boxHeight = textHeight + 20; // Aumentar la altura en 10 píxeles para dar espacio adicional
+                    valueBox.setPreferredSize(new Dimension(boxWidth, boxHeight));
                 }
 
                 variablesPanel.add(variablePanel);
@@ -249,6 +258,10 @@ public class InterfazProyecto extends JFrame {
         int green = 128 + random.nextInt(128);
         int blue = 128 + random.nextInt(128);
         return new Color(red, green, blue);
+    }
+
+    public String getTextoTextArea1() {
+        return textArea1.getText();
     }
 
     public static void main(String[] args) {
