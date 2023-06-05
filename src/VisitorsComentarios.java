@@ -329,9 +329,10 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
         return super.visitFuncdef(ctx);
     }
     public Void visitStmt(PythonParser.StmtContext ctx) {
-        if (ctx.getParent()==null){
+        if (ctx.getParent()==null && this.funcion==true){
             this.funcion=false;
-
+            variables_temporales.clear();
+            valores_temporales.clear();
         }
         return super.visitStmt(ctx);
     }
