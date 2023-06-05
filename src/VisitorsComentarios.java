@@ -21,34 +21,23 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public Void visitExpr_stmt(PythonParser.Expr_stmtContext ctx) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
-        System.out.println("constructor");
-        System.out.println(variables_global.size());
-        System.out.println(variables_temporales.size());
         for (int i = 0; i < variables_global.size() && i < valores_global.size(); i++) {
-            System.out.println("entro");
             String variableName = variables_global.get(i);
             Object obj = valores_global.get(i);
             if (obj instanceof List) {
                 List<Object> lista = (List<Object>) obj;
-                System.out.println(variableName);
-                System.out.println(lista);
                 engine.put(variableName, lista);
             } else if (obj instanceof String) {
                 String str = (String) obj;
                 try {
                     int intValue = Integer.parseInt(str);
-                    System.out.println(variableName);
-                    System.out.println(intValue);
+
                     engine.put(variableName, intValue);
                 } catch (NumberFormatException e) {
-                    System.out.println(variableName);
-                    System.out.println(str);
                     engine.put(variableName, str);
                 }
             } else if (obj instanceof Integer) {
                 Integer str = (Integer) obj;
-                System.out.println(variableName);
-                System.out.println(str);
                 engine.put(variableName, str);
             }
         }
@@ -239,7 +228,6 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public Void visitFor_stmt(PythonParser.For_stmtContext ctx) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
-
         String variable = ctx.exprlist().getText();
         if (ctx.testlist().getText().startsWith("range")) {
             String rangeValue = ctx.testlist().getText().substring(6, ctx.testlist().getText().length() - 1).trim();
@@ -343,8 +331,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public Void visitStmt(PythonParser.StmtContext ctx) {
         if (ctx.getParent()==null){
             this.funcion=false;
-            variables_temporales.clear();
-            valores_temporales.clear();
+
         }
         return super.visitStmt(ctx);
     }

@@ -20,17 +20,6 @@ public class Linea {
     public static boolean dentroFOR;
     public static VisitorsComentarios visitor = new VisitorsComentarios();
 
-    public static void main(String[] args) throws Exception {
-        // Walk the tree created during the parse, trigger callbacks
-
-
-        String linea = interfazProyecto.getLineaActual();
-
-
-        analizarlinea(linea);
-    }
-
-
     public static void analizarlinea(String linea) {
 
         PythonLexer lexer;

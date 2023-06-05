@@ -51,6 +51,7 @@ public class InterfazProyecto extends JFrame {
     public  List<Object> valores_global = new ArrayList<>();
     public boolean ciclo=false;
     public int linea_ciclo;
+    Linea lineaclass = new Linea();
 
 
     public InterfazProyecto() throws IOException, FontFormatException {
@@ -217,7 +218,7 @@ public class InterfazProyecto extends JFrame {
     }
 
     private void leerSiguienteLinea() {
-        Linea lineaclass = new Linea();
+
         String[] lineas = textArea1.getText().split("\\n");
 
         if (lineCounter < lineas.length) {
