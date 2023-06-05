@@ -389,8 +389,24 @@ public class InterfazProyecto extends JFrame {
                     int boxHeight = textHeight + 20; // Aumentar la altura en 10 píxeles para dar espacio adicional
                     valueBox.setPreferredSize(new Dimension(boxWidth, boxHeight));
                 }
-            } else if (valor != null) {
+            } else if (valor != null && valor instanceof Integer) {
 
+                JLabel valueBox = new JLabel(valor.toString());
+                valueBox.setOpaque(true);
+                valueBox.setBackground(getRandomPastelColor());
+                valueBox.setBorder(BorderFactory.createLineBorder(Color.black));
+                valueBox.setHorizontalAlignment(SwingConstants.CENTER);
+                variablePanel.add(valueBox);
+
+                // Ajustar el tamaño de la caja del valueBox al contenido
+                FontMetrics fontMetrics = valueBox.getFontMetrics(valueBox.getFont());
+                int textWidth = fontMetrics.stringWidth(valor.toString());
+                int textHeight = fontMetrics.getHeight();
+                int boxWidth = textWidth + 20; // Aumentar el ancho en 10 píxeles para dar espacio adicional
+                int boxHeight = textHeight + 20; // Aumentar la altura en 10 píxeles para dar espacio adicional
+                valueBox.setPreferredSize(new Dimension(boxWidth, boxHeight));
+            }
+            else if (valor != null && valor instanceof String) {
 
                 JLabel valueBox = new JLabel((String) valor);
                 valueBox.setOpaque(true);

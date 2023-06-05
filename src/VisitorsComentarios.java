@@ -21,7 +21,9 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public Void visitExpr_stmt(PythonParser.Expr_stmtContext ctx) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
+        System.out.println("constructor");
         System.out.println(variables_global.size());
+        System.out.println(variables_temporales.size());
         for (int i = 0; i < variables_global.size() && i < valores_global.size(); i++) {
             System.out.println("entro");
             String variableName = variables_global.get(i);
