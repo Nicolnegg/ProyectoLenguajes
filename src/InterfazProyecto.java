@@ -19,9 +19,17 @@ public class InterfazProyecto extends JFrame {
 
     private JTextArea textArea1;
     private JPanel variablesPanel;
+
+    private int lineCounter = 0;
+
+    public static String lineaActual;
+    private JPanel buttonPanel;
     private JTextArea lineNumbersTextArea;
     private JPanel pythonTutorPanel;
     public static JButton button;
+
+    public static JButton flechaButton;
+
     public static JTextArea textAreaResult;
 
     private Map<String, Object> variables = new HashMap<>();
@@ -112,8 +120,34 @@ public class InterfazProyecto extends JFrame {
 
         button = new JButton("Analizar Código");
 
+        ImageIcon iconoFlecha = new ImageIcon("imagenes/flecha.png");
+
+        Image imagenOriginal = iconoFlecha.getImage();
+
+        int nuevoAncho = 23; // Especifica el nuevo ancho en píxeles
+        int nuevoAlto = 16; // Especifica el nuevo alto en píxeles
+        Image imagenRedimensionada = imagenOriginal.getScaledInstance(nuevoAncho, nuevoAlto, Image.SCALE_SMOOTH);
+        ImageIcon iconoRedimensionado = new ImageIcon(imagenRedimensionada);
+        flechaButton = new JButton(iconoRedimensionado);
+
+        flechaButton.addActionListener(e -> leerSiguienteLinea());
+
+        buttonPanel = new JPanel(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0; // El botón "button" ocupa más espacio horizontalmente
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        buttonPanel.add(button, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 0.0; // El botón "flechaButton" no se expande horizontalmente
+        buttonPanel.add(flechaButton, gbc);
+
         button.addActionListener(e -> analizarCodigo());
-        contentPane.add(button, BorderLayout.SOUTH);
+        contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
         textArea1.getDocument().addDocumentListener(new TextChangeListener());
 
@@ -158,6 +192,24 @@ public class InterfazProyecto extends JFrame {
         public void changedUpdate(DocumentEvent e) {
             updateLineNumbers();
         }
+    }
+
+    private void leerSiguienteLinea() {
+        String[] lineas = textArea1.getText().split("\\n");
+
+        if (lineCounter < lineas.length) {
+            lineaActual = lineas[lineCounter];
+            lineCounter++;
+        } else {
+            lineaActual = "no hay lineas";
+        }
+
+        Linea lineaclass = new Linea();
+
+        lineaclass.analizarlinea(lineaActual);
+
+
+
     }
 
     private void analizarCodigo() {
@@ -264,6 +316,10 @@ public class InterfazProyecto extends JFrame {
         return textArea1.getText();
     }
 
+
+    public String getLineaActual() {
+        return lineaActual;
+    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             InterfazProyecto example = null;

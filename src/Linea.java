@@ -3,12 +3,24 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import java.util.Arrays;
+
 public class Linea {
+
+    private static InterfazProyecto interfazProyecto;
+
     public static void main(String[] args) throws Exception {
-        String linea= "a=[1]";
-        // create a CharStream that reads from standard input / file
-        // create a lexer that feeds off of input CharStream
+
+        String linea = interfazProyecto.getLineaActual();
+
+        analizarlinea(linea);
+    }
+
+
+    public static void analizarlinea(String linea) {
+
         PythonLexer lexer;
+
 
         lexer = new PythonLexer(CharStreams.fromString(linea));
 
