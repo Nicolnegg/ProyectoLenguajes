@@ -238,7 +238,6 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
 
-
         String variable = ctx.exprlist().getText();
         if (ctx.testlist().getText().startsWith("range")) {
             String rangeValue = ctx.testlist().getText().substring(6, ctx.testlist().getText().length() - 1).trim();
@@ -252,7 +251,9 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                     int index = variables_temporales.indexOf(variable);
                     Object value1 = valores_temporales.get(index);
                     int value = ((Number) value1).intValue();
-                    if(valores_temporales.get(index).equals(secondValue)){
+                    if(valores_temporales.get(index).toString().equals(secondValue)){
+                        variables_temporales.clear();
+                        valores_temporales.clear();
                         dentro_del_for=false;
                     }else{
                         if(rangeValues.length >= 3){
@@ -284,7 +285,9 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                     int index = variables_temporales.indexOf(variable);
                     Object value = valores_temporales.get(index);
                     int Value = ((Number) value).intValue();
-                    if(valores_temporales.get(index).equals(secondValue)){
+                    if(valores_temporales.get(index).toString().equals(secondValue)){
+                        variables_temporales.clear();
+                        valores_temporales.clear();
                         dentro_del_for=false;
                     }else{
                         Value += 1;
@@ -308,6 +311,8 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                 Object value = valores_temporales.get(index);
                 int Value = ((Number) value).intValue();
                 if(valores_temporales.get(index).equals(Integer.parseInt(variableValue))){
+                    variables_temporales.clear();
+                    valores_temporales.clear();
                     dentro_del_for = false;
                 }else{
                     Value += 1;
