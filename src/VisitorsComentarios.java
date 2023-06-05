@@ -367,7 +367,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
         }
 
         if(ctx.test()!=null){
-            Object valor = engine.eval(ctx.test().getText());
+            Object valor = engine.eval(ctx.test().getText().replace("and", "&&").replace("or", "||"));
             if (valor instanceof Boolean && valor.equals(false)) {
                 // El objeto es igual a false
                 dentro_del_for=false;

@@ -51,6 +51,7 @@ public class InterfazProyecto extends JFrame {
     public  List<Object> valores_global = new ArrayList<>();
     public boolean ciclo=false;
     public int linea_ciclo;
+    public int linea_salidad_ciclo;
     Linea lineaclass = new Linea();
 
 
@@ -241,12 +242,18 @@ public class InterfazProyecto extends JFrame {
                 }
             }
             if(contadorEspacios<2 && lineaclass.dentroFOR){
+                linea_salidad_ciclo=lineCounter;
                 lineaActual=lineas[linea_ciclo-1]+" \n print(x)";
+
                 lineCounter=linea_ciclo;
             }
         }
-
         lineaclass.analizarlinea(lineaActual);
+        if(ciclo && !lineaclass.dentroFOR){
+            lineaActual=lineas[linea_salidad_ciclo];
+            lineCounter=linea_salidad_ciclo;
+            ciclo=false;
+        }
 
         variables_global_inter = lineaclass.variables_global;
         valores_global_inter =lineaclass.valores_global;
