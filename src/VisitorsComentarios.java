@@ -241,7 +241,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                     int index = variables_temporales.indexOf(variable);
                     Object value1 = valores_temporales.get(index);
                     int value = ((Number) value1).intValue();
-                    if(valores_temporales.get(index).toString().equals(secondValue)){
+                    if(valores_temporales.get(index).equals(((Integer.parseInt(secondValue))- 1))){
                         variables_temporales.clear();
                         valores_temporales.clear();
                         dentro_del_for=false;
@@ -275,7 +275,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                     int index = variables_temporales.indexOf(variable);
                     Object value = valores_temporales.get(index);
                     int Value = ((Number) value).intValue();
-                    if(valores_temporales.get(index).toString().equals(secondValue)){
+                    if(valores_temporales.get(index).equals(((Integer.parseInt(secondValue))- 1))){
                         variables_temporales.clear();
                         valores_temporales.clear();
                         dentro_del_for=false;
@@ -300,7 +300,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                 int index = variables_temporales.indexOf(variable);
                 Object value = valores_temporales.get(index);
                 int Value = ((Number) value).intValue();
-                if(valores_temporales.get(index).equals(Integer.parseInt(variableValue))){
+                if(valores_temporales.get(index).equals((Integer.parseInt(variableValue) - 1))){
                     variables_temporales.clear();
                     valores_temporales.clear();
                     dentro_del_for = false;
