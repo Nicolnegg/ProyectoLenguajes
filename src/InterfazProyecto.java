@@ -295,15 +295,10 @@ public class InterfazProyecto extends JFrame {
             variablePanel.add(valueLabel);
 
 
-            if  (valor != null && valor.getClass().isArray()) {
+            if  (valor != null && valor instanceof List) {
 
-                System.out.println("Adentro que rico ");
 
-                List<Object> lista = (List<Object>) variables.get(valor);
-
-                for (Object elemento : lista) {
-                    System.out.println("Angelll "+ elemento);
-                }
+                List<Object> lista = (List<Object>) valor;
 
 
                 for (Object elemento : lista) {
@@ -323,7 +318,7 @@ public class InterfazProyecto extends JFrame {
                     int boxHeight = textHeight + 20; // Aumentar la altura en 10 píxeles para dar espacio adicional
                     valueBox.setPreferredSize(new Dimension(boxWidth, boxHeight));
                 }
-            } else {
+            } else if (valor != null){
 
 
                 JLabel valueBox = new JLabel((String) valor);
@@ -367,11 +362,10 @@ public class InterfazProyecto extends JFrame {
             variablePanel.add(valueLabel);
 
 
-            if  (valor != null && valor.getClass().isArray()) {
+            if  (valor != null && valor instanceof List) {
 
-                System.out.println("Adentro que rico ");
 
-                List<Object> lista = (List<Object>) variables.get(valor);
+                List<Object> lista = (List<Object>) valor;
 
                 for (Object elemento : lista) {
                     System.out.println("Angelll "+ elemento);
@@ -395,7 +389,7 @@ public class InterfazProyecto extends JFrame {
                     int boxHeight = textHeight + 20; // Aumentar la altura en 10 píxeles para dar espacio adicional
                     valueBox.setPreferredSize(new Dimension(boxWidth, boxHeight));
                 }
-            } else {
+            } else if (valor != null) {
 
 
                 JLabel valueBox = new JLabel((String) valor);
