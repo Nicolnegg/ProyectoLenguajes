@@ -51,6 +51,38 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
         }
         return super.visitExpr_stmt(ctx);
     }
+    public Void visitFor_stmt(PythonParser.For_stmtContext ctx) throws ScriptException {
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("JavaScript");
+
+        String variable = ctx.exprlist().getText();
+
+        if (ctx.testlist().getText().startsWith("range")) {
+            String rangeValue = ctx.testlist().getText().substring(6, ctx.testlist().getText().length() - 1).trim();
+            Object rangeResult = engine.eval(rangeValue);
+
+            if (rangeResult instanceof Number) {
+                int maxValue = ((Number) rangeResult).intValue();
+                System.out.println("Valor máximo de " + variable + ": " + maxValue);
+            } else {
+                throw new RuntimeException("Error: El rango del bucle no es un número válido");
+            }
+        } else {
+            String variableValue = ctx.testlist().getText();
+            try {
+                int intValue = Integer.parseInt(variableValue);
+                System.out.println("Valor máximo de " + variable + ": " + intValue);
+
+            }catch(NumberFormatException e){
+                System.out.println("Con la variable " + variable + " se recorre la lista: " + variableValue);
+            }
+
+        }
+
+        // Aquí puedes hacer cualquier otro procesamiento adicional necesario
+
+        return super.visitFor_stmt(ctx);
+    }
     public List<String> getVariables_global() {
         return variables_global;
     }

@@ -1,11 +1,14 @@
+import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import java.util.Arrays;
+
 public class Linea {
     public static void main(String[] args) throws Exception {
-        String linea= "a=2 +3/7 -5";
+        String linea= "for i in a: \n     print(2)";
         // create a CharStream that reads from standard input / file
         // create a lexer that feeds off of input CharStream
         PythonLexer lexer;
