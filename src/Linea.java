@@ -28,7 +28,16 @@ public class Linea {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         // create a parser that feeds off the tokens buffer
         PythonParser parser = new PythonParser(tokens);
-        ParseTree tree = parser.stmt(); // begin parsing at init rule
+
+        ParseTree tree;
+
+        char espacio=linea.charAt(0);
+        if(espacio==' '){
+            tree = parser.suite(); // begin parsing at init rule
+        }
+        else{
+            tree = parser.stmt(); // begin parsing at init rule
+        }
 
 
         // Walk the tree created during the parse, trigger callbacks

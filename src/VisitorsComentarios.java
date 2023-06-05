@@ -15,7 +15,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public  List<String> variables_temporales = new ArrayList<>();
     public  List<Object> valores_temporales = new ArrayList<>();
 
-    public boolean funcion=false;
+    public boolean funcion=true;
 
     public Void visitExpr_stmt(PythonParser.Expr_stmtContext ctx) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
@@ -24,7 +24,6 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
         if(ctx.testlist_star_expr()!=null){
             if(ctx.assign_part()!=null){
                 if(funcion){
-                    System.out.println("funcion");
                     String valorText= ctx.assign_part().getText();
                     String[] valordiv= valorText.split("=");
                     //valordiv[0] queda eelmoperador, valordiv[1] queda la asignacion
@@ -100,18 +99,6 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                                 variables_temporales.add(variable);
                             }
                         }
-                    }
-
-                    Object obj = valores_temporales.get(0);
-                    if (obj instanceof List) {
-                        List<Object> lista = (List<Object>) obj;
-                        System.out.println(lista.get(0).toString());
-                    } else if (obj instanceof String) {
-                        String str = (String) obj;
-                        System.out.println(str);
-                    } else {
-                        System.out.println(variables_temporales.get(0));
-                        System.out.println("Object type: " + obj.getClass().getName());
                     }
                 }
                 else{
@@ -192,19 +179,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                         }
                     }
 
-                    Object obj = valores_global.get(0);
-                    if (obj instanceof List) {
-                        List<Object> lista = (List<Object>) obj;
-                        System.out.println(lista.get(0).toString());
-                    } else if (obj instanceof String) {
-                        String str = (String) obj;
-                        System.out.println(str);
-                    } else {
-                        System.out.println(variables_global.get(0));
-                        System.out.println("Object type: " + obj.getClass().getName());
-                    }
                 }
-
 
             }
         }
@@ -314,8 +289,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
         return super.visitFuncdef(ctx);
     }
     public Void visitStmt(PythonParser.StmtContext ctx) {
-
-        if (ctx.getParent()!=null){
+        if (ctx.getParent()==null){
             this.funcion=false;
             variables_temporales.clear();
             valores_temporales.clear();
