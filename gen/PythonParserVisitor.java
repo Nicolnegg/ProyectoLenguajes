@@ -60,7 +60,7 @@ public interface PythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitWhile_stmt(PythonParser.While_stmtContext ctx);
+	T visitWhile_stmt(PythonParser.While_stmtContext ctx) throws ScriptException;
 	/**
 	 * Visit a parse tree produced by the {@code for_stmt}
 	 * labeled alternative in {@link PythonParser#compound_stmt}.

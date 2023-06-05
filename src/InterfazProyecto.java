@@ -246,7 +246,6 @@ public class InterfazProyecto extends JFrame {
             }
         }
 
-
         lineaclass.analizarlinea(lineaActual);
 
         variables_global_inter = lineaclass.variables_global;
