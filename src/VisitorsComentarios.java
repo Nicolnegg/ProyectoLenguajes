@@ -21,6 +21,45 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
 
+        for (int i = 0; i < variables_global.size() && i < valores_global.size(); i++) {
+            String variableName = variables_global.get(i);
+            Object obj = valores_global.get(0);
+            if (obj instanceof List) {
+                List<Object> lista = (List<Object>) obj;
+                engine.put(variableName, lista);
+            } else if (obj instanceof String) {
+                String str = (String) obj;
+                try {
+                    int intValue = Integer.parseInt(str);
+                    engine.put(variableName, intValue);
+                } catch (NumberFormatException e) {
+                    engine.put(variableName, str);
+                }
+            } else if (obj instanceof Integer) {
+                Integer str = (Integer) obj;
+                engine.put(variableName, str);
+            }
+        }
+        for (int i = 0; i < variables_temporales.size() && i < valores_temporales.size(); i++) {
+            String variableName = variables_temporales.get(i);
+            Object obj = valores_temporales.get(0);
+            if (obj instanceof List) {
+                List<Object> lista = (List<Object>) obj;
+                engine.put(variableName, lista);
+            } else if (obj instanceof String) {
+                String str = (String) obj;
+                try {
+                    int intValue = Integer.parseInt(str);
+                    engine.put(variableName, intValue);
+                } catch (NumberFormatException e) {
+                    engine.put(variableName, str);
+                }
+            } else if (obj instanceof Integer) {
+                Integer str = (Integer) obj;
+                engine.put(variableName, str);
+            }
+        }
+
         if(ctx.testlist_star_expr()!=null){
             if(ctx.assign_part()!=null){
                 if(funcion){
@@ -179,6 +218,17 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                         }
                     }
 
+                }
+                Object obj = valores_global.get(0);
+                if (obj instanceof List) {
+                    List<Object> lista = (List<Object>) obj;
+                    System.out.println(lista.get(0).toString());
+                } else if (obj instanceof String) {
+                    String str = (String) obj;
+                    System.out.println(str);
+                } else {
+                    System.out.println(variables_global.get(0));
+                    System.out.println("Object type: " + obj.getClass().getName());
                 }
 
             }
