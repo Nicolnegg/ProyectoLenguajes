@@ -53,7 +53,6 @@ public class Linea {
         visitor.visit(tree);
         System.out.println(); // print a \n after translation
 
-
         valores_global = visitor.getValores_global();
         variables_global = visitor.getVariables_global();
         

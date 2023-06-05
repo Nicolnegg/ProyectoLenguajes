@@ -233,7 +233,7 @@ public class InterfazProyecto extends JFrame {
                 }
             }
             if(contadorEspacios<2){
-                lineaActual=lineas[linea_ciclo];
+                lineaActual=lineas[linea_ciclo-1]+" \n print(x)";
                 lineCounter=linea_ciclo;
             }
         }
