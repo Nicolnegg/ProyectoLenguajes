@@ -16,6 +16,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public  List<Object> valores_temporales = new ArrayList<>();
 
     public boolean funcion=true;
+    public boolean dentro_del_for;
 
     public Void visitExpr_stmt(PythonParser.Expr_stmtContext ctx) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
@@ -236,13 +237,12 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public Void visitFor_stmt(PythonParser.For_stmtContext ctx) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
-        boolean dentro_del_for;
+
 
         String variable = ctx.exprlist().getText();
         if (ctx.testlist().getText().startsWith("range")) {
             String rangeValue = ctx.testlist().getText().substring(6, ctx.testlist().getText().length() - 1).trim();
             String[] rangeValues = rangeValue.split(",");
-
             if (rangeValues.length >= 2) {
                 String secondValue = rangeValues[1].trim();
                 Object rangeResult = engine.eval(secondValue);
@@ -292,7 +292,6 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                     }
                 }else{
                     if (rangeResult instanceof Number) {
-                        int maxValue = ((Number) rangeResult).intValue();
                         int Value = 1;
                         variables_temporales.add(variable);
                         valores_temporales.add(Value);
@@ -309,7 +308,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                 Object value = valores_temporales.get(index);
                 int Value = ((Number) value).intValue();
                 if(valores_temporales.get(index).equals(Integer.parseInt(variableValue))){
-                    dentro_del_for=false;
+                    dentro_del_for = false;
                 }else{
                     Value += 1;
                     valores_temporales.set(index, Value);
@@ -328,8 +327,6 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
 
             }
         }
-
-        dentro_del_for = false;
         return super.visitFor_stmt(ctx);
     }
     public Void visitFuncdef(PythonParser.FuncdefContext ctx) {
@@ -356,5 +353,8 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     }
     public List<Object> getValores_temporales() {
         return valores_temporales;
+    }
+    public boolean getdDentro_del_for() {
+        return dentro_del_for;
     }
 }

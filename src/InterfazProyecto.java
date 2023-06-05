@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class InterfazProyecto extends JFrame {
@@ -47,6 +49,8 @@ public class InterfazProyecto extends JFrame {
 
     public  List<String> variables_global = new ArrayList<>();
     public  List<Object> valores_global = new ArrayList<>();
+    public boolean ciclo=false;
+    public int linea_ciclo;
 
 
     public InterfazProyecto() throws IOException, FontFormatException {
@@ -213,13 +217,34 @@ public class InterfazProyecto extends JFrame {
     }
 
     private void leerSiguienteLinea() {
+        Linea lineaclass = new Linea();
         String[] lineas = textArea1.getText().split("\\n");
+
         if (lineCounter < lineas.length) {
             lineaActual = lineas[lineCounter];
             lineCounter++;
         }
+        Pattern pattern = Pattern.compile("(while|for)");
+        Matcher matcher = pattern.matcher(lineaActual);
+        while (matcher.find()) {
+            ciclo=true;
+            linea_ciclo=lineCounter;
+            lineaActual=lineaActual +" \n print(x)";
+        }
+        int contadorEspacios = 0;
+        if(ciclo){
+            updateLineNumbers();
+            for (int i = 0; i < lineaActual.length(); i++) {
+                if (lineaActual.charAt(i) == ' ') {
+                    contadorEspacios++;
+                }
+            }
+            if(contadorEspacios<2 && lineaclass.dentroFOR){
+                lineaActual=lineas[linea_ciclo-1]+" \n print(x)";
+                lineCounter=linea_ciclo;
+            }
+        }
 
-        Linea lineaclass = new Linea();
 
         lineaclass.analizarlinea(lineaActual);
 
