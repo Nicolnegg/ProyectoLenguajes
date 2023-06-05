@@ -18,9 +18,9 @@ El Analizador de Código Python es una herramienta útil para desarrolladores y 
 
 ## Requisitos Previos
 
-- Java JDK (versión X.X.X)
-- Biblioteca ANTLR (versión X.X.X)
-- Biblioteca Swing (versión X.X.X)
+- Java JDK 
+- Biblioteca ANTLR
+- Biblioteca Swing 
 
 ## Instalación
 
