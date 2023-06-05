@@ -211,6 +211,7 @@ public class InterfazProyecto extends JFrame {
     }
 
     private void leerSiguienteLinea() {
+        Linea lineaclass = new Linea();
         String[] lineas = textArea1.getText().split("\\n");
 
         if (lineCounter < lineas.length) {
@@ -232,13 +233,12 @@ public class InterfazProyecto extends JFrame {
                     contadorEspacios++;
                 }
             }
-            if(contadorEspacios<2){
+            if(contadorEspacios<2 && lineaclass.dentroFOR){
                 lineaActual=lineas[linea_ciclo-1]+" \n print(x)";
                 lineCounter=linea_ciclo;
             }
         }
 
-        Linea lineaclass = new Linea();
 
         lineaclass.analizarlinea(lineaActual);
 

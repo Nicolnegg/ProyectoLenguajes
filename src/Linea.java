@@ -14,6 +14,7 @@ public class Linea {
 
     public static List<String> variables_global = new ArrayList<>();
     public static List<Object> valores_global = new ArrayList<>();
+    public static boolean dentroFOR;
     public static VisitorsComentarios visitor = new VisitorsComentarios();
 
     public static void main(String[] args) throws Exception {
@@ -55,6 +56,7 @@ public class Linea {
 
         valores_global = visitor.getValores_global();
         variables_global = visitor.getVariables_global();
+        dentroFOR = visitor.getdDentro_del_for();
         
     }
 }
