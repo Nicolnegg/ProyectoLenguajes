@@ -18,7 +18,7 @@ El Analizador de Código Python es una herramienta útil para desarrolladores y 
 
 ## Requisitos Previos
 
-- Java JDK 
+- Java JDK 11 o 8
 - Biblioteca ANTLR
 - Biblioteca Swing 
 
@@ -35,8 +35,10 @@ El Analizador de Código Python es una herramienta útil para desarrolladores y 
 2. Aparecerá una interfaz gráfica de usuario.
 3. Ingresa el código Python en el área de texto.
 4. Haz clic en el botón "Analizar" para procesar el código.
-5. Se abrirá una ventana que muestra el árbol de análisis sintáctico.
-6. Se realizarán otras acciones con el resultado obtenido del análisis sintáctico.
+5. Se abrirá una ventana que muestra el árbol de análisis sintáctico. (Se puede revisar el arbol o minimizarlo para ir a la interfaz principald e nuevo)
+6. Podras ver los comentarios de codigo en la ventana de la mitad.
+7. Se podra precionar el boton de flecha en la esquina para recorrer el codigo y ver los valores de las variables en distintas partes de codigo.
+8. El boton es un recorrido paso a paso por el codigo.
 
 ## Contribuciones
 
