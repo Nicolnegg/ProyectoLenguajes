@@ -212,8 +212,6 @@ public class InterfazProyecto extends JFrame {
         if (lineCounter < lineas.length) {
             lineaActual = lineas[lineCounter];
             lineCounter++;
-        } else {
-            lineaActual = "no hay lineas";
         }
 
 

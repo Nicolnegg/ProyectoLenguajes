@@ -14,8 +14,11 @@ public class Linea {
 
     public static List<String> variables_global = new ArrayList<>();
     public static List<Object> valores_global = new ArrayList<>();
+    public static VisitorsComentarios visitor = new VisitorsComentarios();
 
     public static void main(String[] args) throws Exception {
+        // Walk the tree created during the parse, trigger callbacks
+
 
         String linea = interfazProyecto.getLineaActual();
 
@@ -47,8 +50,6 @@ public class Linea {
         }
 
 
-        // Walk the tree created during the parse, trigger callbacks
-        VisitorsComentarios visitor = new VisitorsComentarios();
         visitor.visit(tree);
         System.out.println(); // print a \n after translation
 

@@ -20,23 +20,32 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public Void visitExpr_stmt(PythonParser.Expr_stmtContext ctx) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
-
+        System.out.println(variables_global.size());
         for (int i = 0; i < variables_global.size() && i < valores_global.size(); i++) {
+            System.out.println("entro");
             String variableName = variables_global.get(i);
-            Object obj = valores_global.get(0);
+            Object obj = valores_global.get(i);
             if (obj instanceof List) {
                 List<Object> lista = (List<Object>) obj;
+                System.out.println(variableName);
+                System.out.println(lista);
                 engine.put(variableName, lista);
             } else if (obj instanceof String) {
                 String str = (String) obj;
                 try {
                     int intValue = Integer.parseInt(str);
+                    System.out.println(variableName);
+                    System.out.println(intValue);
                     engine.put(variableName, intValue);
                 } catch (NumberFormatException e) {
+                    System.out.println(variableName);
+                    System.out.println(str);
                     engine.put(variableName, str);
                 }
             } else if (obj instanceof Integer) {
                 Integer str = (Integer) obj;
+                System.out.println(variableName);
+                System.out.println(str);
                 engine.put(variableName, str);
             }
         }
@@ -218,17 +227,6 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                         }
                     }
 
-                }
-                Object obj = valores_global.get(0);
-                if (obj instanceof List) {
-                    List<Object> lista = (List<Object>) obj;
-                    System.out.println(lista.get(0).toString());
-                } else if (obj instanceof String) {
-                    String str = (String) obj;
-                    System.out.println(str);
-                } else {
-                    System.out.println(variables_global.get(0));
-                    System.out.println("Object type: " + obj.getClass().getName());
                 }
 
             }
