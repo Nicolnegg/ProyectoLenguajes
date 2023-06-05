@@ -60,7 +60,6 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                 engine.put(variableName, str);
             }
         }
-
         if(ctx.testlist_star_expr()!=null){
             if(ctx.assign_part()!=null){
                 if(funcion){
@@ -323,6 +322,61 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
             }
         }
         return super.visitFor_stmt(ctx);
+    }
+    public Void visitWhile_stmt(PythonParser.While_stmtContext ctx) throws ScriptException {
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("JavaScript");
+        for (int i = 0; i < variables_global.size() && i < valores_global.size(); i++) {
+            String variableName = variables_global.get(i);
+            Object obj = valores_global.get(i);
+            if (obj instanceof List) {
+                List<Object> lista = (List<Object>) obj;
+                engine.put(variableName, lista);
+            } else if (obj instanceof String) {
+                String str = (String) obj;
+                try {
+                    int intValue = Integer.parseInt(str);
+
+                    engine.put(variableName, intValue);
+                } catch (NumberFormatException e) {
+                    engine.put(variableName, str);
+                }
+            } else if (obj instanceof Integer) {
+                Integer str = (Integer) obj;
+                engine.put(variableName, str);
+            }
+        }
+        for (int i = 0; i < variables_temporales.size() && i < valores_temporales.size(); i++) {
+            String variableName = variables_temporales.get(i);
+            Object obj = valores_temporales.get(0);
+            if (obj instanceof List) {
+                List<Object> lista = (List<Object>) obj;
+                engine.put(variableName, lista);
+            } else if (obj instanceof String) {
+                String str = (String) obj;
+                try {
+                    int intValue = Integer.parseInt(str);
+                    engine.put(variableName, intValue);
+                } catch (NumberFormatException e) {
+                    engine.put(variableName, str);
+                }
+            } else if (obj instanceof Integer) {
+                Integer str = (Integer) obj;
+                engine.put(variableName, str);
+            }
+        }
+
+        if(ctx.test()!=null){
+            Object valor = engine.eval(ctx.test().getText());
+            if (valor instanceof Boolean && valor.equals(false)) {
+                // El objeto es igual a false
+                dentro_del_for=false;
+            }else{
+                dentro_del_for=true;
+            }
+        }
+        System.out.println(dentro_del_for);
+        return super.visitWhile_stmt(ctx);
     }
     public Void visitFuncdef(PythonParser.FuncdefContext ctx) {
         this.funcion=true;
