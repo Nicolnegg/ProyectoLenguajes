@@ -14,6 +14,9 @@ public class Linea {
 
     public static List<String> variables_global = new ArrayList<>();
     public static List<Object> valores_global = new ArrayList<>();
+
+    public static List<String> variables_temporales = new ArrayList<>();
+    public static List<Object> valores_temporales = new ArrayList<>();
     public static VisitorsComentarios visitor = new VisitorsComentarios();
 
     public static void main(String[] args) throws Exception {
@@ -31,7 +34,6 @@ public class Linea {
 
         PythonLexer lexer;
 
-        System.out.println(linea);
         lexer = new PythonLexer(CharStreams.fromString(linea));
 
         // create a buffer of tokens pulled from the lexer
@@ -56,6 +58,10 @@ public class Linea {
 
         valores_global = visitor.getValores_global();
         variables_global = visitor.getVariables_global();
-        
+
+
+        valores_temporales = visitor.getValores_temporales();
+        variables_temporales = visitor.getVariables_temporales();
+
     }
 }

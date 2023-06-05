@@ -21,6 +21,8 @@ public class InterfazProyecto extends JFrame {
     private static List<String> variables_global_inter = new ArrayList<>();
     private static List<Object> valores_global_inter = new ArrayList<>();
 
+    private static List<String> variables_temp_inter = new ArrayList<>();
+    private static List<Object> valores_temp_inter = new ArrayList<>();
     private JTextArea textArea1;
     private JPanel variablesPanel;
 
@@ -37,6 +39,10 @@ public class InterfazProyecto extends JFrame {
     public static JTextArea textAreaResult;
 
     private Map<String, Object> variables = new HashMap<>();
+
+    private Map<String, Object> variables_temporales = new HashMap<>();
+
+
     private PrintStream consolePrintStream;
 
     public  List<String> variables_global = new ArrayList<>();
@@ -208,14 +214,10 @@ public class InterfazProyecto extends JFrame {
 
     private void leerSiguienteLinea() {
         String[] lineas = textArea1.getText().split("\\n");
-
         if (lineCounter < lineas.length) {
             lineaActual = lineas[lineCounter];
             lineCounter++;
         }
-
-
-
 
         Linea lineaclass = new Linea();
 
@@ -223,6 +225,9 @@ public class InterfazProyecto extends JFrame {
 
         variables_global_inter = lineaclass.variables_global;
         valores_global_inter =lineaclass.valores_global;
+
+        variables_temp_inter = lineaclass.variables_temporales;
+        valores_temp_inter = lineaclass.valores_temporales;
 
         updateLineNumbers();
 
@@ -238,6 +243,16 @@ public class InterfazProyecto extends JFrame {
             }
         }
 
+        if (variables_temp_inter.size() == valores_temp_inter.size()) {
+            for (int i = 0; i < variables_temp_inter.size(); i++) {
+                String key = variables_temp_inter.get(i);
+                Object value = valores_temp_inter.get(i);
+                variables_temporales.put(key, value);
+
+            }
+        }
+
+        //VARIABLES GLOBALES
         for (Entry<String, Object> entry : variables.entrySet()) {
             String variable = entry.getKey();
             Object valor = entry.getValue();
@@ -246,7 +261,80 @@ public class InterfazProyecto extends JFrame {
             JPanel variablePanel = new JPanel();
             variablePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
             variablePanel.setMaximumSize(new Dimension(300, 30));
+            JLabel nameLabel1 = new JLabel("V. Global");
+            variablePanel.add(nameLabel1);
+            JLabel nameLabel = new JLabel(variable);
+            variablePanel.add(nameLabel);
 
+            JLabel valueLabel = new JLabel(" = ");
+            variablePanel.add(valueLabel);
+
+
+            if  (valor != null && valor.getClass().isArray()) {
+
+                System.out.println("Adentro que rico ");
+
+                List<Object> lista = (List<Object>) variables.get(valor);
+
+                for (Object elemento : lista) {
+                    System.out.println("Angelll "+ elemento);
+                }
+
+
+                for (Object elemento : lista) {
+                    String valorElemento = elemento.toString();
+                    JLabel valueBox = new JLabel(valorElemento);
+                    valueBox.setOpaque(true);
+                    valueBox.setBackground(getRandomPastelColor());
+                    valueBox.setBorder(BorderFactory.createLineBorder(Color.black));
+                    valueBox.setHorizontalAlignment(SwingConstants.CENTER);
+                    variablePanel.add(valueBox);
+
+                    // Ajustar el tamaño de la caja del valueBox al contenido
+                    FontMetrics fontMetrics = valueBox.getFontMetrics(valueBox.getFont());
+                    int textWidth = fontMetrics.stringWidth(valorElemento);
+                    int textHeight = fontMetrics.getHeight();
+                    int boxWidth = textWidth + 20; // Aumentar el ancho en 10 píxeles para dar espacio adicional
+                    int boxHeight = textHeight + 20; // Aumentar la altura en 10 píxeles para dar espacio adicional
+                    valueBox.setPreferredSize(new Dimension(boxWidth, boxHeight));
+                }
+            } else {
+
+
+                JLabel valueBox = new JLabel((String) valor);
+                valueBox.setOpaque(true);
+                valueBox.setBackground(getRandomPastelColor());
+                valueBox.setBorder(BorderFactory.createLineBorder(Color.black));
+                valueBox.setHorizontalAlignment(SwingConstants.CENTER);
+                variablePanel.add(valueBox);
+
+                // Ajustar el tamaño de la caja del valueBox al contenido
+                FontMetrics fontMetrics = valueBox.getFontMetrics(valueBox.getFont());
+                int textWidth = fontMetrics.stringWidth((String) valor);
+                int textHeight = fontMetrics.getHeight();
+                int boxWidth = textWidth + 20; // Aumentar el ancho en 10 píxeles para dar espacio adicional
+                int boxHeight = textHeight + 20; // Aumentar la altura en 10 píxeles para dar espacio adicional
+                valueBox.setPreferredSize(new Dimension(boxWidth, boxHeight));
+            }
+
+            variablesPanel.add(variablePanel);
+
+
+        }
+
+
+        //VARIABLES TEMPORALES
+
+        for (Entry<String, Object> entry : variables_temporales.entrySet()) {
+            String variable = entry.getKey();
+            Object valor = entry.getValue();
+
+
+            JPanel variablePanel = new JPanel();
+            variablePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+            variablePanel.setMaximumSize(new Dimension(300, 30));
+            JLabel nameLabel1 = new JLabel("V. Temporal");
+            variablePanel.add(nameLabel1);
             JLabel nameLabel = new JLabel(variable);
             variablePanel.add(nameLabel);
 
