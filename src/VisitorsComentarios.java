@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
@@ -17,9 +18,9 @@ import javax.script.ScriptException;
 
 public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public  List<String> variables_global = new ArrayList<>();
-    public  List<String> valores_global = new ArrayList<>();
+    public  List<Object> valores_global = new ArrayList<>();
     public  List<String> variables_temporales = new ArrayList<>();
-    public  List<String> valores_temporales = new ArrayList<>();
+    public  List<Object> valores_temporales = new ArrayList<>();
     public Void visitExpr_stmt(PythonParser.Expr_stmtContext ctx) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
@@ -29,6 +30,10 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                 String valorText= ctx.assign_part().getText();
                 String[] valordiv= valorText.split("=");
                 //valordiv[0] queda eelmoperador, valordiv[1] queda la asignacion
+                char es_lista=valordiv[1].charAt(0);
+                if (es_lista=='['){
+
+                }
                 Object valor = engine.eval(valordiv[1]);
                 String variable = ctx.testlist_star_expr().getText();
                 if(variables_global.contains(variable)){
@@ -47,6 +52,23 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                     valores_global.add(valor.toString());
                     variables_global.add(variable);
                 }
+                Object obj = valores_global.get(0);
+                System.out.println(obj);
+                if (obj instanceof ArrayList) {
+                    ArrayList<Object> lista = (ArrayList<Object>) obj;
+                    System.out.println(lista.get(0).toString());
+                } else if (obj instanceof Object[]) {
+                    Object[] array = (Object[]) obj;
+                    ArrayList<Object> lista = new ArrayList<>(Arrays.asList(array));
+                    System.out.println(lista.get(0).toString());
+                } else if (obj instanceof String) {
+                    String str = (String) obj;
+                    System.out.println(str);
+                } else {
+                    System.out.println(variables_global.get(0));
+                    System.out.println("Object type: " + obj.getClass().getName());
+                }
+
             }
         }
         return super.visitExpr_stmt(ctx);
@@ -54,13 +76,13 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public List<String> getVariables_global() {
         return variables_global;
     }
-    public List<String> getValores_global() {
+    public List<Object> getValores_global() {
         return valores_global;
     }
     public List<String> getVariables_temporales() {
         return variables_temporales;
     }
-    public List<String> getValores_temporales() {
+    public List<Object> getValores_temporales() {
         return valores_temporales;
     }
 }
