@@ -53,7 +53,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
                     variables_global.add(variable);
                 }
                 Object obj = valores_global.get(0);
-                System.out.println(obj);
+
                 if (obj instanceof ArrayList) {
                     ArrayList<Object> lista = (ArrayList<Object>) obj;
                     System.out.println(lista.get(0).toString());
@@ -108,9 +108,7 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public List<String> getVariables_global() {
         return variables_global;
     }
-    public List<Object> getValores_global() {
-        return valores_global;
-    }
+    public List<Object> getValores_global() { return valores_global; }
     public List<String> getVariables_temporales() {
         return variables_temporales;
     }

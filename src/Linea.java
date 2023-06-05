@@ -3,15 +3,22 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Linea {
 
     private static InterfazProyecto interfazProyecto;
 
+
+    public static List<String> variables_global = new ArrayList<>();
+    public static List<Object> valores_global = new ArrayList<>();
+
     public static void main(String[] args) throws Exception {
 
         String linea = interfazProyecto.getLineaActual();
+
 
         analizarlinea(linea);
     }
@@ -21,7 +28,7 @@ public class Linea {
 
         PythonLexer lexer;
 
-
+        System.out.println(linea);
         lexer = new PythonLexer(CharStreams.fromString(linea));
 
         // create a buffer of tokens pulled from the lexer
@@ -36,5 +43,9 @@ public class Linea {
         visitor.visit(tree);
         System.out.println(); // print a \n after translation
 
+
+        valores_global = visitor.getValores_global();
+        variables_global = visitor.getVariables_global();
+        
     }
 }

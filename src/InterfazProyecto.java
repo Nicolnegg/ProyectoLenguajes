@@ -2,20 +2,24 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.File;
-import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Map.Entry;
+
 
 public class InterfazProyecto extends JFrame {
+
+    private static List<String> variables_global_inter = new ArrayList<>();
+    private static List<Object> valores_global_inter = new ArrayList<>();
 
     private JTextArea textArea1;
     private JPanel variablesPanel;
@@ -34,6 +38,10 @@ public class InterfazProyecto extends JFrame {
 
     private Map<String, Object> variables = new HashMap<>();
     private PrintStream consolePrintStream;
+
+    public  List<String> variables_global = new ArrayList<>();
+    public  List<Object> valores_global = new ArrayList<>();
+
 
     public InterfazProyecto() throws IOException, FontFormatException {
         setTitle("Analizador código Python");
@@ -164,18 +172,22 @@ public class InterfazProyecto extends JFrame {
         });
         System.setOut(consolePrintStream);
     }
-
     private void updateLineNumbers() {
         String text = textArea1.getText();
         int lines = textArea1.getLineCount();
 
         StringBuilder numbers = new StringBuilder();
         for (int i = 1; i <= lines; i++) {
-            numbers.append(String.format("%-3d", i)).append("\n");
+            if (i == lineCounter) {
+                numbers.append(String.format("-> %-3d", i)).append("\n");
+            } else {
+                numbers.append(String.format("%-3d", i)).append("\n");
+            }
         }
 
         lineNumbersTextArea.setText(numbers.toString());
     }
+
 
     private class TextChangeListener implements DocumentListener {
         @Override
@@ -204,76 +216,60 @@ public class InterfazProyecto extends JFrame {
             lineaActual = "no hay lineas";
         }
 
+
+
+
         Linea lineaclass = new Linea();
 
         lineaclass.analizarlinea(lineaActual);
 
+        variables_global_inter = lineaclass.variables_global;
+        valores_global_inter =lineaclass.valores_global;
 
+        updateLineNumbers();
 
-    }
-
-    private void analizarCodigo() {
-        String codigo = textArea1.getText();
-        variables.clear();
         variablesPanel.removeAll();
 
-        // Analizar el código y extraer las asignaciones de variables
-        // Aquí debes implementar tu lógica para analizar el código y extraer las variables
 
-        // Ejemplo: Extraer las asignaciones de variables utilizando expresiones regulares
-        String pattern = "\\b(\\w+)\\s*=\\s*(.+)";
-        String[] lines = codigo.split("\\n");
-        for (String line : lines) {
-            line = line.trim();
-            if (line.matches(pattern)) {
-                String variable = line.replaceAll(pattern, "$1");
-                String valor = line.replaceAll(pattern, "$2");
+        if (variables_global_inter.size() == valores_global_inter.size()) {
+            for (int i = 0; i < variables_global_inter.size(); i++) {
+                String key = variables_global_inter.get(i);
+                Object value = valores_global_inter.get(i);
+                variables.put(key, value);
 
-                // Verificar si es una lista en Python
-                if (valor.startsWith("[") && valor.endsWith("]")) {
-                    valor = valor.substring(1, valor.length() - 1);
-                    String[] elementos = valor.split(",");
-                    List<Object> lista = new ArrayList<>();
-                    for (String elemento : elementos) {
-                        elemento = elemento.trim();
-                        lista.add(elemento);
-                    }
-                    variables.put(variable, lista);
-                } else {
-                    variables.put(variable, valor);
+            }
+        }
+
+        for (Entry<String, Object> entry : variables.entrySet()) {
+            String variable = entry.getKey();
+            Object valor = entry.getValue();
+
+
+            JPanel variablePanel = new JPanel();
+            variablePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+            variablePanel.setMaximumSize(new Dimension(300, 30));
+
+            JLabel nameLabel = new JLabel(variable);
+            variablePanel.add(nameLabel);
+
+            JLabel valueLabel = new JLabel(" = ");
+            variablePanel.add(valueLabel);
+
+
+            if  (valor != null && valor.getClass().isArray()) {
+
+                System.out.println("Adentro que rico ");
+
+                List<Object> lista = (List<Object>) variables.get(valor);
+
+                for (Object elemento : lista) {
+                    System.out.println("Angelll "+ elemento);
                 }
 
-                JPanel variablePanel = new JPanel();
-                variablePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-                variablePanel.setMaximumSize(new Dimension(300, 30));
 
-                JLabel nameLabel = new JLabel(variable);
-                variablePanel.add(nameLabel);
-
-                JLabel valueLabel = new JLabel(" = ");
-                variablePanel.add(valueLabel);
-
-                if (variables.get(variable) instanceof List) {
-                    List<Object> lista = (List<Object>) variables.get(variable);
-                    for (Object elemento : lista) {
-                        String valorElemento = elemento.toString();
-                        JLabel valueBox = new JLabel(valorElemento);
-                        valueBox.setOpaque(true);
-                        valueBox.setBackground(getRandomPastelColor());
-                        valueBox.setBorder(BorderFactory.createLineBorder(Color.black));
-                        valueBox.setHorizontalAlignment(SwingConstants.CENTER);
-                        variablePanel.add(valueBox);
-
-                        // Ajustar el tamaño de la caja del valueBox al contenido
-                        FontMetrics fontMetrics = valueBox.getFontMetrics(valueBox.getFont());
-                        int textWidth = fontMetrics.stringWidth(valorElemento);
-                        int textHeight = fontMetrics.getHeight();
-                        int boxWidth = textWidth + 20; // Aumentar el ancho en 10 píxeles para dar espacio adicional
-                        int boxHeight = textHeight + 20; // Aumentar la altura en 10 píxeles para dar espacio adicional
-                        valueBox.setPreferredSize(new Dimension(boxWidth, boxHeight));
-                    }
-                } else {
-                    JLabel valueBox = new JLabel(valor);
+                for (Object elemento : lista) {
+                    String valorElemento = elemento.toString();
+                    JLabel valueBox = new JLabel(valorElemento);
                     valueBox.setOpaque(true);
                     valueBox.setBackground(getRandomPastelColor());
                     valueBox.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -282,21 +278,46 @@ public class InterfazProyecto extends JFrame {
 
                     // Ajustar el tamaño de la caja del valueBox al contenido
                     FontMetrics fontMetrics = valueBox.getFontMetrics(valueBox.getFont());
-                    int textWidth = fontMetrics.stringWidth(valor);
+                    int textWidth = fontMetrics.stringWidth(valorElemento);
                     int textHeight = fontMetrics.getHeight();
                     int boxWidth = textWidth + 20; // Aumentar el ancho en 10 píxeles para dar espacio adicional
                     int boxHeight = textHeight + 20; // Aumentar la altura en 10 píxeles para dar espacio adicional
                     valueBox.setPreferredSize(new Dimension(boxWidth, boxHeight));
                 }
+            } else {
 
-                variablesPanel.add(variablePanel);
+
+                JLabel valueBox = new JLabel((String) valor);
+                valueBox.setOpaque(true);
+                valueBox.setBackground(getRandomPastelColor());
+                valueBox.setBorder(BorderFactory.createLineBorder(Color.black));
+                valueBox.setHorizontalAlignment(SwingConstants.CENTER);
+                variablePanel.add(valueBox);
+
+                // Ajustar el tamaño de la caja del valueBox al contenido
+                FontMetrics fontMetrics = valueBox.getFontMetrics(valueBox.getFont());
+                int textWidth = fontMetrics.stringWidth((String) valor);
+                int textHeight = fontMetrics.getHeight();
+                int boxWidth = textWidth + 20; // Aumentar el ancho en 10 píxeles para dar espacio adicional
+                int boxHeight = textHeight + 20; // Aumentar la altura en 10 píxeles para dar espacio adicional
+                valueBox.setPreferredSize(new Dimension(boxWidth, boxHeight));
             }
+
+            variablesPanel.add(variablePanel);
+
+
         }
 
         variablesPanel.revalidate();
         variablesPanel.repaint();
 
         updatePythonTutorPanel();
+
+    }
+
+    private void analizarCodigo() {
+        String codigo = textArea1.getText();
+
     }
 
     private void updatePythonTutorPanel() {
