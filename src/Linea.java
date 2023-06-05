@@ -1,5 +1,3 @@
-import org.antlr.v4.gui.TreeViewer;
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -37,5 +35,6 @@ public class Linea {
         VisitorsComentarios visitor = new VisitorsComentarios();
         visitor.visit(tree);
         System.out.println(); // print a \n after translation
+
     }
 }

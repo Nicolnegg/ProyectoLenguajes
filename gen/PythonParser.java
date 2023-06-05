@@ -753,8 +753,15 @@ public class PythonParser extends PythonParserBase {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PythonParserVisitor ) return ((PythonParserVisitor<? extends T>)visitor).visitFor_stmt(this);
+			if ( visitor instanceof PythonParserVisitor ) {
+				try {
+					return ((PythonParserVisitor<? extends T>)visitor).visitFor_stmt(this);
+				} catch (ScriptException e) {
+					e.printStackTrace();
+				}
+			}
 			else return visitor.visitChildren(this);
+			return null;
 		}
 	}
 
