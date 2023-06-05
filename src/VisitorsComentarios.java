@@ -213,33 +213,100 @@ public class VisitorsComentarios  extends PythonParserBaseVisitor<Void> {
     public Void visitFor_stmt(PythonParser.For_stmtContext ctx) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
+        boolean dentro_del_for;
 
         String variable = ctx.exprlist().getText();
-
         if (ctx.testlist().getText().startsWith("range")) {
             String rangeValue = ctx.testlist().getText().substring(6, ctx.testlist().getText().length() - 1).trim();
-            Object rangeResult = engine.eval(rangeValue);
+            String[] rangeValues = rangeValue.split(",");
 
-            if (rangeResult instanceof Number) {
-                int maxValue = ((Number) rangeResult).intValue();
-                System.out.println("Valor máximo de " + variable + ": " + maxValue);
-            } else {
-                throw new RuntimeException("Error: El rango del bucle no es un número válido");
+            if (rangeValues.length >= 2) {
+                String secondValue = rangeValues[1].trim();
+                Object rangeResult = engine.eval(secondValue);
+                String firstValue = rangeValues[0].trim();
+                Object rangeResult1 = engine.eval(firstValue);
+                if (variables_temporales.contains(variable)){
+                    int index = variables_temporales.indexOf(variable);
+                    Object value1 = valores_temporales.get(index);
+                    int value = ((Number) value1).intValue();
+                    if(valores_temporales.get(index).equals(secondValue)){
+                        dentro_del_for=false;
+                    }else{
+                        if(rangeValues.length >= 3){
+                            String thirdValue = rangeValues[2].trim();
+                            Object rangeResult3 = engine.eval(thirdValue);
+                            int Value = ((Number) rangeResult3).intValue();
+                            value += Value;
+                            valores_temporales.set(index, value);
+                        }else{
+                            value += 1;
+                            valores_temporales.set(index, value);
+                        }
+                    }
+                } else{
+                    if (rangeResult instanceof Number) {
+                        int maxValue = ((Number) rangeResult).intValue();
+                        int Value = ((Number) rangeResult1).intValue();
+                        variables_temporales.add(variable);
+                        valores_temporales.add(Value);
+                        dentro_del_for = true;
+                    } else {
+                        throw new RuntimeException("Error: El rango del bucle no es un número válido");
+                    }
+                }
+            } else{
+                String secondValue = rangeValues[0].trim();
+                Object rangeResult = engine.eval(secondValue);
+                if (variables_temporales.contains(variable)){
+                    int index = variables_temporales.indexOf(variable);
+                    Object value = valores_temporales.get(index);
+                    int Value = ((Number) value).intValue();
+                    if(valores_temporales.get(index).equals(secondValue)){
+                        dentro_del_for=false;
+                    }else{
+                        Value += 1;
+                        valores_temporales.set(index, Value);
+                    }
+                }else{
+                    if (rangeResult instanceof Number) {
+                        int maxValue = ((Number) rangeResult).intValue();
+                        int Value = 1;
+                        variables_temporales.add(variable);
+                        valores_temporales.add(Value);
+                        dentro_del_for = true;
+                    } else {
+                        throw new RuntimeException("Error: El rango del bucle no es un número válido");
+                    }
+                }
             }
-        } else {
+        }else{
             String variableValue = ctx.testlist().getText();
-            try {
-                int intValue = Integer.parseInt(variableValue);
-                System.out.println("Valor máximo de " + variable + ": " + intValue);
+            if (variables_temporales.contains(variable)){
+                int index = variables_temporales.indexOf(variable);
+                Object value = valores_temporales.get(index);
+                int Value = ((Number) value).intValue();
+                if(valores_temporales.get(index).equals(Integer.parseInt(variableValue))){
+                    dentro_del_for=false;
+                }else{
+                    Value += 1;
+                    valores_temporales.set(index, Value);
+                }
+            }else{
+                try {
+                    int intValue = 1;
+                    variables_temporales.add(variable);
+                    valores_temporales.add(1);
+                    dentro_del_for = true;
+                }catch(NumberFormatException e){
+                    variables_temporales.add(variable);
+                    valores_temporales.add(variableValue);
+                    dentro_del_for = true;
+                }
 
-            }catch(NumberFormatException e){
-                System.out.println("Con la variable " + variable + " se recorre la lista: " + variableValue);
             }
-
         }
 
-        // Aquí puedes hacer cualquier otro procesamiento adicional necesario
-
+        dentro_del_for = false;
         return super.visitFor_stmt(ctx);
     }
     public Void visitFuncdef(PythonParser.FuncdefContext ctx) {
