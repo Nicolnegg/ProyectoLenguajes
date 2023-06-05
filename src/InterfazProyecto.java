@@ -270,11 +270,14 @@ public class InterfazProyecto extends JFrame {
         }
 
         if (variables_temp_inter.size() == valores_temp_inter.size()) {
+
+            if(variables_temp_inter.size() == 0){
+                variables_temporales.clear();
+            }
             for (int i = 0; i < variables_temp_inter.size(); i++) {
                 String key = variables_temp_inter.get(i);
                 Object value = valores_temp_inter.get(i);
                 variables_temporales.put(key, value);
-
             }
         }
 
@@ -346,6 +349,9 @@ public class InterfazProyecto extends JFrame {
 
         //VARIABLES TEMPORALES
 
+
+
+
         for (Entry<String, Object> entry : variables_temporales.entrySet()) {
             String variable = entry.getKey();
             Object valor = entry.getValue();
@@ -362,6 +368,9 @@ public class InterfazProyecto extends JFrame {
             JLabel valueLabel = new JLabel(" = ");
             variablePanel.add(valueLabel);
 
+            if (variables_temporales.size() == 0){
+                variablePanel.removeAll();
+            }
 
             if  (valor != null && valor instanceof List) {
 
@@ -426,6 +435,8 @@ public class InterfazProyecto extends JFrame {
             }
 
             variablesPanel.add(variablePanel);
+            variablesPanel.revalidate();
+            variablesPanel.repaint();
 
 
         }
